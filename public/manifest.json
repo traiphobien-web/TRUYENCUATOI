@@ -1,0 +1,20 @@
+{
+  "short_name": "Story Studio",
+  "name": "Gemini Story Studio - Viết Truyện AI Tự Động",
+  "description": "Ứng dụng sáng tác, quản lý dàn ý và tự động viết tiểu thuyết chuyên nghiệp bằng AI Gemini.",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234f46e5'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>📖</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#f8fafc",
+  "theme_color": "#4f46e5",
+  "display": "standalone",
+  "orientation": "any",
+  "scope": "/",
+  "lang": "vi",
+  "categories": ["productivity", "books", "utilities"]
+}

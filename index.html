@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="description" content="Gemini Story Studio - Ứng dụng sáng tác, quản lý dàn ý và tự động viết tiểu thuyết chuyên nghiệp bằng AI Gemini.">
+  <link rel="manifest" href="/manifest.json">
   <title>Gemini Story Studio - Viết Truyện AI Tự Động</title>
   <!-- Google Fonts CDN -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,14 +23,14 @@
   
   <style>
     :root {
-      --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --font-serif: 'Playfair Display', 'Merriweather', Georgia, serif;
       
       --bg-main: #f8fafc;
       --bg-card: #ffffff;
       --bg-sidebar: #0f172a;
       
-      --text-main: #1e293b;
+      --text-main: #0f172a;
       --text-muted: #64748b;
       --text-light: #94a3b8;
       
@@ -44,9 +47,9 @@
       
       --border: #e2e8f0;
       --radius: 12px;
-      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
     }
 
     * {
@@ -62,6 +65,7 @@
       line-height: 1.5;
       min-height: 100vh;
       display: flex;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* Layout Structure */
@@ -79,8 +83,9 @@
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
       z-index: 50;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .sidebar-brand {
@@ -88,7 +93,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .sidebar-brand svg {
@@ -121,8 +126,8 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px 16px;
-      border-radius: 8px;
+      padding: 10px 14px;
+      border-radius: 10px;
       color: #cbd5e1;
       font-weight: 500;
       font-size: 0.9rem;
@@ -143,6 +148,7 @@
       background-color: var(--primary);
       color: #ffffff;
       font-weight: 600;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
     }
 
     .nav-item svg {
@@ -163,7 +169,7 @@
 
     .sidebar-footer {
       padding: 16px 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       font-size: 0.75rem;
       color: #64748b;
       display: flex;
@@ -182,9 +188,10 @@
 
     /* Top Bar Header */
     .top-header {
-      background-color: var(--bg-card);
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
-      padding: 16px 32px;
+      padding: 14px 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -212,6 +219,7 @@
       font-size: 1.25rem;
       font-weight: 700;
       color: var(--text-main);
+      letter-spacing: -0.01em;
     }
 
     .header-actions {
@@ -226,10 +234,11 @@
       gap: 8px;
       background-color: var(--bg-main);
       border: 1px solid var(--border);
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 20px;
       font-size: 0.85rem;
       font-weight: 500;
+      color: var(--text-main);
     }
 
     .status-dot {
@@ -243,15 +252,21 @@
     .status-dot.danger { background-color: var(--danger); }
 
     .model-selector {
-      padding: 6px 12px;
+      padding: 7px 14px;
       border-radius: 8px;
       border: 1px solid var(--border);
       background-color: var(--bg-card);
       font-size: 0.85rem;
       color: var(--text-main);
       outline: none;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .model-selector:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
     }
 
     /* Content Body */
@@ -285,6 +300,11 @@
       padding: 24px;
       box-shadow: var(--shadow-sm);
       margin-bottom: 24px;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow);
     }
 
     .card-header {
@@ -301,6 +321,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      letter-spacing: -0.01em;
     }
 
     .card-subtitle {
@@ -321,19 +342,26 @@
       border-radius: 8px;
       border: 1px solid transparent;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none;
       white-space: nowrap;
+      user-select: none;
     }
 
     .btn-primary {
       background-color: var(--primary);
       color: #ffffff;
+      box-shadow: 0 1px 3px rgba(79, 70, 229, 0.3);
     }
 
     .btn-primary:hover {
       background-color: var(--primary-hover);
-      box-shadow: var(--shadow);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
     }
 
     .btn-secondary {
@@ -344,6 +372,7 @@
 
     .btn-secondary:hover {
       background-color: var(--bg-main);
+      border-color: #cbd5e1;
     }
 
     .btn-danger {
@@ -363,7 +392,7 @@
 
     .btn-sm {
       padding: 6px 12px;
-      font-size: 0.8rem;
+      font-size: 0.825rem;
     }
 
     /* Form Elements */
@@ -632,6 +661,48 @@
     .theme-white { background-color: #ffffff; color: #1e293b; }
     .theme-sepia { background-color: #fbf0d9; color: #432818; }
     .theme-dark { background-color: #121212; color: #e4e4e7; }
+
+    /* Drag & Drop Chapter Reorder Styles */
+    .chapter-drag-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      position: relative;
+    }
+    .chapter-drag-card.dragging {
+      opacity: 0.4;
+      transform: scale(0.99);
+      border: 2px dashed var(--primary) !important;
+      background: rgba(79, 70, 229, 0.05) !important;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+    }
+    .chapter-drag-card.drag-over {
+      border: 2px solid var(--primary) !important;
+      background: rgba(79, 70, 229, 0.08) !important;
+      box-shadow: 0 0 0 4px var(--primary-light) !important;
+      transform: translateY(-2px);
+    }
+    .drag-handle {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: grab;
+      user-select: none;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+    .drag-handle:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
     .theme-mint { background-color: #e8f5e9; color: #1b4332; }
     .theme-navy { background-color: #1e293b; color: #f8fafc; }
     .theme-butter { background-color: #ffffde; color: #5c3d11; }
@@ -1230,6 +1301,11 @@
                 🤖 AI Gợi Ý Chương Tiếp
               </button>
             </div>
+          </div>
+
+          <!-- Drag & Drop visual tip banner -->
+          <div style="background: rgba(79, 70, 229, 0.08); border: 1px dashed var(--primary); padding: 10px 14px; border-radius: 8px; margin-bottom: 14px; font-size: 0.825rem; color: var(--primary); display: flex; align-items: center; gap: 8px; font-weight: 600;">
+            <span>✋ <strong>Sắp Xếp Thứ Tự Chương Trực Quan:</strong> Nhấn giữ & kéo thả nút <span style="background:#fff; border:1px solid var(--primary); padding:2px 6px; border-radius:4px; font-size:0.8rem;">⋮⋮ Kéo thả</span> (hoặc nút <span style="background:#fff; border:1px solid var(--border); padding:2px 6px; border-radius:4px; font-size:0.8rem;">▲ / ▼</span>) để thay đổi vị trí. Số thứ tự chương sẽ tự động được cập nhật lại chuẩn xác!</span>
           </div>
 
           <!-- Container for interactive chapter cards -->
@@ -2865,6 +2941,84 @@
     }
   }
 
+  // Drag & Drop State for Outline Chapters
+  let draggedChapterIndex = null;
+
+  function handleChapterDragStart(e, idx) {
+    draggedChapterIndex = idx;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', idx);
+    const card = e.currentTarget;
+    setTimeout(() => {
+      card.classList.add('dragging');
+    }, 0);
+  }
+
+  function handleChapterDragOver(e, idx) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (draggedChapterIndex === null || draggedChapterIndex === idx) return;
+    
+    const card = e.currentTarget;
+    card.classList.add('drag-over');
+  }
+
+  function handleChapterDragLeave(e) {
+    const card = e.currentTarget;
+    card.classList.remove('drag-over');
+  }
+
+  function handleChapterDrop(e, targetIdx) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    document.querySelectorAll('.chapter-drag-card').forEach(c => c.classList.remove('drag-over', 'dragging'));
+
+    if (draggedChapterIndex !== null && draggedChapterIndex !== targetIdx && activeOutline && activeOutline.chapters) {
+      const draggedItem = activeOutline.chapters[draggedChapterIndex];
+      
+      // Reorder chapters array
+      activeOutline.chapters.splice(draggedChapterIndex, 1);
+      activeOutline.chapters.splice(targetIdx, 0, draggedItem);
+
+      // Auto update chapter sequence numbers
+      activeOutline.chapters.forEach((ch, i) => {
+        ch.chapterNumber = i + 1;
+      });
+
+      renderEditorChapters();
+      showToast(`✨ Đã chuyển "${draggedItem.chapterTitle || 'Chương'}" sang Chương ${targetIdx + 1}!`, 'success');
+    }
+    draggedChapterIndex = null;
+  }
+
+  function handleChapterDragEnd(e) {
+    draggedChapterIndex = null;
+    document.querySelectorAll('.chapter-drag-card').forEach(c => c.classList.remove('dragging', 'drag-over'));
+  }
+
+  function moveChapterUp(idx) {
+    if (!activeOutline || idx <= 0) return;
+    const temp = activeOutline.chapters[idx];
+    activeOutline.chapters[idx] = activeOutline.chapters[idx - 1];
+    activeOutline.chapters[idx - 1] = temp;
+
+    activeOutline.chapters.forEach((ch, i) => ch.chapterNumber = i + 1);
+    renderEditorChapters();
+    showToast(`Đã chuyển Chương ${idx + 1} lên vị trí Chương ${idx}!`, 'info');
+  }
+
+  function moveChapterDown(idx) {
+    if (!activeOutline || idx >= activeOutline.chapters.length - 1) return;
+    const temp = activeOutline.chapters[idx];
+    activeOutline.chapters[idx] = activeOutline.chapters[idx + 1];
+    activeOutline.chapters[idx + 1] = temp;
+
+    activeOutline.chapters.forEach((ch, i) => ch.chapterNumber = i + 1);
+    renderEditorChapters();
+    showToast(`Đã chuyển Chương ${idx + 1} xuống vị trí Chương ${idx + 2}!`, 'info');
+  }
+
   function renderEditorChapters() {
     if (!activeOutline) return;
     const container = document.getElementById('editor-chapters-container');
@@ -2874,16 +3028,34 @@
     container.innerHTML = activeOutline.chapters.map((chap, idx) => {
       const isWritten = chap.content && chap.content.trim().length > 50;
       return `
-        <div class="card" style="padding: 14px; border: 1px solid ${isWritten ? 'var(--success)' : 'var(--border)'}; background: ${isWritten ? 'rgba(16, 185, 129, 0.03)' : 'var(--bg-card)'}; border-radius: 8px;">
+        <div class="card chapter-drag-card"
+             draggable="true"
+             ondragstart="handleChapterDragStart(event, ${idx})"
+             ondragover="handleChapterDragOver(event, ${idx})"
+             ondragleave="handleChapterDragLeave(event)"
+             ondrop="handleChapterDrop(event, ${idx})"
+             ondragend="handleChapterDragEnd(event)"
+             style="padding: 14px; border: 1px solid ${isWritten ? 'var(--success)' : 'var(--border)'}; background: ${isWritten ? 'rgba(16, 185, 129, 0.03)' : 'var(--bg-card)'}; border-radius: 8px;">
+          
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="font-weight: 700; color: var(--primary); font-size: 0.9rem;">Chương ${idx + 1}</span>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <!-- Drag Handle Button -->
+              <span class="drag-handle" title="Nhấn giữ và kéo thả để di chuyển thứ tự chương">
+                ⋮⋮ Kéo thả
+              </span>
+
+              <span style="font-weight: 700; color: var(--primary); font-size: 0.95rem;">Chương ${idx + 1}</span>
               ${isWritten 
                 ? `<span style="background: var(--success); color: #fff; font-size: 0.72rem; padding: 2px 8px; border-radius: 9999px; font-weight: 600;">🟢 Đã có nội dung (${chap.content.length} ký tự)</span>` 
                 : `<span style="background: #64748b; color: #fff; font-size: 0.72rem; padding: 2px 8px; border-radius: 9999px; font-weight: 600;">📝 Mới có kịch bản chi tiết</span>`
               }
             </div>
-            <div style="display: flex; gap: 6px;">
+
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <!-- Quick Reorder Buttons -->
+              ${idx > 0 ? `<button type="button" class="btn btn-secondary btn-sm" onclick="moveChapterUp(${idx})" title="Chuyển chương lên trên">▲</button>` : ''}
+              ${idx < activeOutline.chapters.length - 1 ? `<button type="button" class="btn btn-secondary btn-sm" onclick="moveChapterDown(${idx})" title="Chuyển chương xuống dưới">▼</button>` : ''}
+
               <button type="button" class="btn btn-primary btn-sm" onclick="generateSingleChapterInEditor(${idx})">
                 ${isWritten ? '🔄 Viết Lại' : '✍️ AI Viết Chương Này'}
               </button>
