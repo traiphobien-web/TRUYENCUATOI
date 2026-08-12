@@ -1,0 +1,6 @@
+{
+  "name": "Gemini Story Studio",
+  "description": "Ứng dụng tạo và đọc truyện tự động bằng Gemini API với quản lý API key thông minh",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
