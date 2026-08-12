@@ -1012,13 +1012,29 @@
           <span id="top-key-status">Chưa có API Key</span>
         </div>
 
-        <select class="model-selector" id="model-select">
-          <option value="gemini-2.5-flash" selected>⚡ Gemini 2.5 Flash (Tốc độ cao & Mặc định khuyên dùng)</option>
-          <option value="gemini-2.5-pro">🧠 Gemini 2.5 Pro (Suy luận sâu & Sáng tác văn học)</option>
-          <option value="gemini-2.0-flash">🚀 Gemini 2.0 Flash (Tốc độ phản hồi cực nhanh)</option>
-          <option value="gemini-2.0-flash-lite">🎈 Gemini 2.0 Flash Lite (Tiết kiệm Quota)</option>
-          <option value="gemini-1.5-flash">⚡ Gemini 1.5 Flash (Chuẩn hóa ổn định)</option>
-          <option value="gemini-1.5-pro">🧠 Gemini 1.5 Pro (Phân tích chuyên sâu)</option>
+        <select class="model-selector" id="model-select" onchange="handleModelSelectChange(this)">
+          <optgroup label="🚀 Thế Hệ Gemini 3.x (Mới Nhất)">
+            <option value="gemini-3.6-flash">🌟 Gemini 3.6 Flash (Tốc độ & Hiệu năng cao)</option>
+            <option value="gemini-3.5-flash">⚡ Gemini 3.5 Flash (Thế hệ mới - Đột phá)</option>
+            <option value="gemini-3.0-flash">🔥 Gemini 3.0 Flash (Thế hệ mới - Siêu tốc)</option>
+            <option value="gemini-3.0-pro">🧠 Gemini 3.0 Pro (Thế hệ mới - Suy luận cao cấp)</option>
+          </optgroup>
+          <optgroup label="⚡ Thế Hệ Gemini 2.x">
+            <option value="gemini-2.5-flash">⚡ Gemini 2.5 Flash</option>
+            <option value="gemini-2.5-pro">🧠 Gemini 2.5 Pro</option>
+            <option value="gemini-2.0-flash" selected>🚀 Gemini 2.0 Flash (Tốc độ cao & Khuyên dùng)</option>
+            <option value="gemini-2.0-flash-lite">🎈 Gemini 2.0 Flash Lite (Tiết kiệm Quota)</option>
+            <option value="gemini-2.0-pro-exp-02-05">🧪 Gemini 2.0 Pro Experimental</option>
+            <option value="gemini-2.0-flash-thinking-exp">🤔 Gemini 2.0 Flash Thinking (Suy luận sâu)</option>
+          </optgroup>
+          <optgroup label="🛡️ Thế Hệ Gemini 1.5 & Standard">
+            <option value="gemini-1.5-flash">⚡ Gemini 1.5 Flash (Tương thích 100% mọi Key)</option>
+            <option value="gemini-1.5-pro">🧠 Gemini 1.5 Pro (Suy luận & Sáng tác chuyên sâu)</option>
+            <option value="gemini-1.0-pro">📜 Gemini 1.0 Pro</option>
+          </optgroup>
+          <optgroup label="⚙️ Tùy Chỉnh">
+            <option value="custom">✍️ Nhập mã mô hình tùy chỉnh...</option>
+          </optgroup>
         </select>
       </div>
     </header>
@@ -2218,19 +2234,28 @@
     }
   }
 
+  let customModelName = '';
+
+  function handleModelSelectChange(selectElem) {
+    if (selectElem.value === 'custom') {
+      const input = prompt('✍️ Nhập tên mô hình Gemini tùy chỉnh (Ví dụ: gemini-3.6-flash, gemini-2.0-pro-exp-02-05, gemini-experimental):', customModelName || 'gemini-3.6-flash');
+      if (input && input.trim()) {
+        customModelName = input.trim();
+        let opt = selectElem.querySelector('option[value="custom"]');
+        if (opt) opt.textContent = `✍️ Tùy chỉnh: ${customModelName}`;
+      } else {
+        selectElem.value = 'gemini-2.0-flash';
+      }
+    }
+  }
+
   function getSelectedModel() {
     const sel = document.getElementById('model-select');
     const val = sel ? sel.value : '';
-    const validModels = [
-      'gemini-2.5-flash',
-      'gemini-2.5-pro',
-      'gemini-2.0-flash',
-      'gemini-2.0-flash-lite',
-      'gemini-1.5-flash',
-      'gemini-1.5-pro'
-    ];
-    if (validModels.includes(val)) return val;
-    return 'gemini-2.5-flash';
+    if (val === 'custom' && customModelName) {
+      return customModelName;
+    }
+    return val || 'gemini-2.0-flash';
   }
 
   // --- KEY SANITIZER & UNIVERSAL PARSER ---
@@ -2268,7 +2293,7 @@
     const cleanKeyVal = cleanApiKey(apiKey);
     if (!cleanKeyVal) throw new Error('API Key không hợp lệ hoặc bị rỗng!');
 
-    const validModel = (model && ['gemini-2.5-flash','gemini-2.5-pro','gemini-2.0-flash','gemini-2.0-flash-lite','gemini-1.5-flash','gemini-1.5-pro'].includes(model)) ? model : getSelectedModel();
+    const validModel = model || getSelectedModel();
 
     // Standard Gemini API Keys created in AI Studio ALWAYS start with 'AIza' or are standard key strings
     // OAuth access tokens start with 'ya29.' or 'ey'
