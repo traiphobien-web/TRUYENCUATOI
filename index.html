@@ -1171,6 +1171,14 @@
                 <select id="story-style-select" class="form-select">
                   <option value="default" selected>✨ Mặc định (Văn phong mượt mà, chuẩn mực)</option>
                   <option value="auto">🤖 AI Tự Cân Đối Theo Cốt Truyện</option>
+                  <optgroup label="🎭 Bộ Điều Chỉnh Văn Phong Tác Giả (Voice Tuner)">
+                    <option value="preset_kimdung">🗡️ Kiếm Hiệp Kim Dung (Hào khí giang hồ, tả võ uyển chuyển, thi văn cổ điển)</option>
+                    <option value="preset_tutien">☯️ Tu Tiên Huyền Huyễn (Uy áp thiên địa, linh khí dồi dào, ngôn từ hoành tráng)</option>
+                    <option value="preset_trintham">🕵️ Trinh Thám U Tối (U uất, căng thẳng, suy luận sắc bén, chi tiết tỉ mỉ)</option>
+                    <option value="preset_ngontinh">🌸 Ngôn Tình Lãng Mạn (Ngọt ngào, tinh tế, nội tâm sâu sắc, tình cảm da diết)</option>
+                    <option value="preset_vientuong">🚀 Viễn Tưởng Kịch Tính (Thuật ngữ viễn tưởng, nhịp dồn dập, bối cảnh vũ trụ)</option>
+                    <option value="preset_haibua">🤣 Hài Bựa Tấu Hài (Dí dỏm, trend hiện đại, tình huống oái oăm rớt hàm)</option>
+                  </optgroup>
                   <optgroup label="🎨 Văn Phong Đã Lưu Của Bạn" id="optgroup-saved-styles">
                     <option value="" disabled>(Chưa có văn phong nào được lưu - Hãy học văn phong trước)</option>
                   </optgroup>
@@ -1254,6 +1262,15 @@
                 </div>
               </button>
             </div>
+
+            <!-- Position corresponding to user's red circle in screenshot -->
+            <div style="margin-top: 12px;">
+              <button type="button" onclick="saveCurrentProjectToLibrary()" class="btn btn-secondary" style="width: 100%; padding: 12px; font-size: 0.95rem; font-weight: 700; background: rgba(79, 70, 229, 0.08); border: 1px dashed var(--primary); color: var(--primary); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span>💾</span>
+                <span>Lưu Dự Án Truyện Về Thư Viện</span>
+                <span style="font-size: 0.78rem; font-weight: 400; opacity: 0.85;">(Lưu tất cả từ ý tưởng, dàn ý, thông tin để khi mở lại hiển thị đầy đủ)</span>
+              </button>
+            </div>
           </form>
         </div>
 
@@ -1268,9 +1285,14 @@
                 Kiểm tra, chỉnh sửa nội dung/tiêu đề từng chương, thêm bớt chương trước khi viết.
               </p>
             </div>
-            <button type="button" class="btn btn-secondary btn-sm" onclick="cancelOutlineEditor()">
-              ↩️ Quay Lại Form Sáng Tác
-            </button>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="cancelOutlineEditor()">
+                ↩️ Quay Lại Form Sáng Tác
+              </button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="deleteCurrentOutlineScript()" title="Xoá kịch bản chi tiết này">
+                🗑️ Xoá Dàn Ý Kịch Bản Này
+              </button>
+            </div>
           </div>
 
           <div class="form-grid" style="margin-bottom: 16px;">
@@ -1293,12 +1315,18 @@
             <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin: 0;">
               📜 Danh Sách Kịch Bản Các Chương (<span id="editor-chapter-count">0</span> chương)
             </h4>
-            <div style="display: flex; gap: 8px;">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
               <button type="button" class="btn btn-secondary btn-sm" onclick="addBlankChapterToEditor()">
-                ➕ Thêm Chương Thủ Công
+                ➕ Thêm Chương
               </button>
               <button type="button" class="btn btn-secondary btn-sm" onclick="aiSuggestNextChapterOutline()">
                 🤖 AI Gợi Ý Chương Tiếp
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="openBranchingPlotPrompterModal()" style="background: linear-gradient(135deg, #4f46e5, #7c3aed); border: none; color: white;">
+                ⚡ 3 Hướng Mới (Bí Ý Tưởng)
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="openCharacterCodexModal()" style="color: #059669; border-color: #10b981;">
+                🧠 Sơ Đồ Nhân Vật (Mind Map)
               </button>
             </div>
           </div>
@@ -1440,6 +1468,7 @@
             </div>
 
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn btn-primary btn-sm" onclick="openCharacterCodexModal()" style="background: linear-gradient(135deg, #059669, #10b981); border:none; color:white;">🧠 AI Trích Xuất Sơ Đồ & Hồ Sơ Nhân Vật (Mind Map)</button>
               <button class="btn btn-primary btn-sm" onclick="openAddCharacterModal()">🧑‍🤝‍🧑 + Thêm Nhân Vật Mới</button>
               <button class="btn btn-secondary btn-sm" onclick="openAddWorldRuleModal()">🌍 + Thêm Quy Tắc Thế Giới</button>
             </div>
@@ -1898,6 +1927,89 @@
   </div>
 </div>
 
+<!-- Modal 4: AI Branching Plot Prompter (3 Hướng Phát Triển Cốt Truyện) -->
+<div id="branching-plot-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.8); z-index:1000; align-items:center; justify-content:center; backdrop-filter:blur(6px);">
+  <div style="background:var(--bg-card); width:94%; max-width:800px; max-height:92vh; border-radius:18px; box-shadow:0 25px 50px -12px rgba(0, 0, 0, 0.35); border:1px solid rgba(124, 58, 237, 0.3); overflow:hidden; display:flex; flex-direction:column;">
+    <div style="padding:18px 24px; background:linear-gradient(135deg, #1e1b4b, #311042); color:#fff; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1);">
+      <div>
+        <h3 style="font-size:1.2rem; font-weight:700; margin:0; display:flex; align-items:center; gap:8px;">
+          ⚡ Gợi Ý 3 Hướng Phát Triển Cốt Truyện Tiếp Theo
+        </h3>
+        <p style="font-size:0.8rem; color:#cbd5e1; margin:4px 0 0 0;">Giải quyết bí ý tưởng tức thì với 3 kịch bản nối tiếp do AI đề xuất</p>
+      </div>
+      <button onclick="closeBranchingPlotModal()" style="background:none; border:none; color:#cbd5e1; font-size:1.6rem; cursor:pointer;">&times;</button>
+    </div>
+
+    <div style="padding:20px; overflow-y:auto; flex-grow:1;">
+      <div id="branching-plot-loading" style="display:none; text-align:center; padding:40px 20px;">
+        <div class="loading-spinner" style="width:40px; height:40px; border-width:4px; margin:0 auto 16px;"></div>
+        <p style="font-weight:700; color:var(--primary); font-size:1rem; margin-bottom:4px;">⚡ Gemini AI đang phân tích kịch bản & suy luận 3 hướng đi tiếp theo...</p>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Xây dựng kịch bản: Bất ngờ (Plot Twist), Kịch tính (Action) và Cảm xúc (Emotional)</p>
+      </div>
+
+      <div id="branching-plot-results" style="display:flex; flex-direction:column; gap:16px;">
+        <!-- 3 Branch Cards Rendered Here -->
+      </div>
+    </div>
+
+    <div style="padding:14px 20px; background:var(--bg-main); border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:0.8rem; color:var(--text-muted);">💡 Nhấn "Áp Dụng Hướng Này" để chèn nội dung gợi ý vào kịch bản sáng tác.</span>
+      <button class="btn btn-secondary btn-sm" onclick="closeBranchingPlotModal()">Đóng Window</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 5: Character Codex & Mind Map (Sơ Đồ & Hồ Sơ Nhân Vật Thông Minh) -->
+<div id="character-codex-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.82); z-index:1000; align-items:center; justify-content:center; backdrop-filter:blur(6px);">
+  <div style="background:var(--bg-card); width:95%; max-width:920px; max-height:93vh; border-radius:18px; box-shadow:0 25px 50px -12px rgba(0, 0, 0, 0.4); border:1px solid rgba(16, 185, 129, 0.3); overflow:hidden; display:flex; flex-direction:column;">
+    <div style="padding:18px 24px; background:linear-gradient(135deg, #064e3b, #022c22); color:#fff; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1);">
+      <div>
+        <h3 style="font-size:1.2rem; font-weight:700; margin:0; display:flex; align-items:center; gap:8px;">
+          🧠 Sơ Đồ & Hồ Sơ Nhân Vật Thông Minh (Character Mind Map)
+        </h3>
+        <p style="font-size:0.8rem; color:#a7f3d0; margin:4px 0 0 0;">AI tự động quét & trích xuất hồ sơ nhân vật, ngoại hình, tính cách và sơ đồ mối quan hệ</p>
+      </div>
+      <button onclick="closeCharacterCodexModal()" style="background:none; border:none; color:#a7f3d0; font-size:1.6rem; cursor:pointer;">&times;</button>
+    </div>
+
+    <div style="padding:16px 20px; background:rgba(16, 185, 129, 0.08); border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <div style="font-size:0.85rem; color:var(--text-main); font-weight:600;">
+        📊 Trích xuất tự động từ kịch bản / truyện đang mở hoặc ý tưởng hiện tại.
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-primary btn-sm" onclick="runAiExtractCharacterCodex()" style="background:#10b981; border:none;">
+          ✨ Quét & Trích Xuất Bằng AI
+        </button>
+        <button class="btn btn-secondary btn-sm" id="btn-save-codex-to-lore" onclick="saveExtractedCodexToLorebook()" style="display:none; color:#059669; border-color:#10b981;">
+          💾 Đồng Bồ Tất Cả Vào Lorebook
+        </button>
+      </div>
+    </div>
+
+    <div style="padding:20px; overflow-y:auto; flex-grow:1;">
+      <div id="codex-loading" style="display:none; text-align:center; padding:40px 20px;">
+        <div class="loading-spinner" style="width:40px; height:40px; border-width:4px; border-color:#10b981 transparent #10b981 transparent; margin:0 auto 16px;"></div>
+        <p style="font-weight:700; color:#059669; font-size:1rem; margin-bottom:4px;">🧠 Gemini AI đang phân tích mối quan hệ & tính cách các nhân vật...</p>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Trích xuất tên, ngoại hình, tính cách, bối cảnh xuất hiện và ma trận mối quan hệ.</p>
+      </div>
+
+      <div id="codex-empty-state" style="text-align:center; padding:40px 20px; color:var(--text-muted);">
+        <div style="font-size:3rem; margin-bottom:12px;">🕸️</div>
+        <h4 style="font-weight:700; color:var(--text-main); margin-bottom:6px;">Chưa Có Sơ Đồ Nhân Vật Được Quét</h4>
+        <p style="font-size:0.85rem; max-width:480px; margin:0 auto 16px;">Nhấn nút <strong>"✨ Quét & Trích Xuất Bằng AI"</strong> ở trên để AI tự động đọc cốt truyện/chương và dựng sơ đồ hồ sơ nhân vật hoàn chỉnh.</p>
+      </div>
+
+      <div id="codex-results-container" style="display:none;">
+        <!-- Character Profiles & Mind Map Grid -->
+      </div>
+    </div>
+
+    <div style="padding:12px 20px; background:var(--bg-main); border-top:1px solid var(--border); display:flex; justify-content:flex-end;">
+      <button class="btn btn-secondary btn-sm" onclick="closeCharacterCodexModal()">Đóng</button>
+    </div>
+  </div>
+</div>
+
 <script>
   // Storage Keys & IndexedDB Config
   const DB_NAME = 'GeminiStoryStudioDB';
@@ -2151,72 +2263,73 @@
     return s;
   }
 
-  // --- UNIVERSAL GEMINI API EXECUTOR & DUAL AUTHENTICATION ---
+  // --- UNIVERSAL GEMINI API EXECUTOR & CLEAN AUTHENTICATION ---
   async function executeGeminiApiRequest(apiKey, model, payload = null, endpointAction = 'generateContent') {
     const cleanKeyVal = cleanApiKey(apiKey);
     if (!cleanKeyVal) throw new Error('API Key không hợp lệ hoặc bị rỗng!');
 
     const validModel = (model && ['gemini-2.5-flash','gemini-2.5-pro','gemini-2.0-flash','gemini-2.0-flash-lite','gemini-1.5-flash','gemini-1.5-pro'].includes(model)) ? model : getSelectedModel();
 
-    // Standard Gemini API Keys usually start with AIzaSy... and have no dots
-    // OAuth / Bearer Access Tokens often start with AQ, ya29., ey, or contain dots
-    const isBearer = cleanKeyVal.startsWith('ya29.') || cleanKeyVal.startsWith('AQ') || cleanKeyVal.startsWith('ey') || cleanKeyVal.includes('.') || cleanKeyVal.length > 60;
+    // Standard Gemini API Keys created in AI Studio ALWAYS start with 'AIza' or are standard key strings
+    // OAuth access tokens start with 'ya29.' or 'ey'
+    const isOAuthBearer = cleanKeyVal.startsWith('ya29.') || cleanKeyVal.startsWith('ey');
 
     let baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models';
-    
-    function buildRequestConfig(useBearer) {
-      let requestUrl = baseUrl;
-      let requestHeaders = {};
-      if (payload) requestHeaders['Content-Type'] = 'application/json';
+    let requestUrl = baseUrl;
+    let requestHeaders = {};
+    if (payload) requestHeaders['Content-Type'] = 'application/json';
 
-      if (endpointAction === 'models') {
-        if (useBearer) {
-          requestHeaders['Authorization'] = `Bearer ${cleanKeyVal}`;
-        } else {
-          requestUrl += `?key=${encodeURIComponent(cleanKeyVal)}`;
-          requestHeaders['x-goog-api-key'] = cleanKeyVal;
-        }
+    if (endpointAction === 'models') {
+      if (isOAuthBearer) {
+        requestHeaders['Authorization'] = `Bearer ${cleanKeyVal}`;
       } else {
-        if (useBearer) {
-          requestUrl += `/${validModel}:${endpointAction}`;
-          requestHeaders['Authorization'] = `Bearer ${cleanKeyVal}`;
-        } else {
-          requestUrl += `/${validModel}:${endpointAction}?key=${encodeURIComponent(cleanKeyVal)}`;
-          requestHeaders['x-goog-api-key'] = cleanKeyVal;
-        }
+        requestUrl += `?key=${encodeURIComponent(cleanKeyVal)}`;
+        requestHeaders['x-goog-api-key'] = cleanKeyVal;
       }
-      return { requestUrl, requestHeaders };
+    } else {
+      if (isOAuthBearer) {
+        requestUrl += `/${validModel}:${endpointAction}`;
+        requestHeaders['Authorization'] = `Bearer ${cleanKeyVal}`;
+      } else {
+        requestUrl += `/${validModel}:${endpointAction}?key=${encodeURIComponent(cleanKeyVal)}`;
+        requestHeaders['x-goog-api-key'] = cleanKeyVal;
+      }
     }
 
-    // Try primary auth strategy
-    let { requestUrl, requestHeaders } = buildRequestConfig(isBearer);
     let method = payload ? 'POST' : 'GET';
     let body = payload ? JSON.stringify(payload) : null;
 
     let res = await fetch(requestUrl, { method, headers: requestHeaders, body });
 
-    // Fallback if HTTP 400/401 Invalid Argument occurs
-    if (!res.ok && (res.status === 400 || res.status === 401)) {
+    if (!res.ok) {
       const cloneText = await res.text();
       let errJson = {};
       try { errJson = JSON.parse(cloneText); } catch(e){}
-      const errMessage = errJson.error?.message || cloneText;
+      const rawMsg = errJson.error?.message || cloneText;
+      const lowerMsg = rawMsg.toLowerCase();
 
-      // Try alternate auth strategy
-      if (res.status === 400 || res.status === 401 || errMessage.toLowerCase().includes('invalid')) {
-        const altConfig = buildRequestConfig(!isBearer);
-        const fallbackRes = await fetch(altConfig.requestUrl, { method, headers: altConfig.requestHeaders, body });
-        if (fallbackRes.ok) {
-          return fallbackRes;
-        }
+      let msg = rawMsg;
+      if (
+        lowerMsg.includes('invalid authentication credentials') || 
+        lowerMsg.includes('expected oauth 2 access token') || 
+        lowerMsg.includes('api key not valid') || 
+        lowerMsg.includes('api_key_invalid') || 
+        lowerMsg.includes('unauthenticated') || 
+        lowerMsg.includes('invalid argument') || 
+        res.status === 401
+      ) {
+        msg = `API Key không hợp lệ hoặc đã bị thu hồi/hết hạn (${cleanKeyVal.substring(0, 8)}...). Vui lòng kiểm tra lại Key trên Google AI Studio!`;
+      } else if (res.status === 429 || lowerMsg.includes('quota') || lowerMsg.includes('rate limit') || lowerMsg.includes('resource_exhausted')) {
+        msg = `Lỗi 429 Rate Limit: Tạm thời hết lượt gọi (Quota) trong phút này. Tự động chuyển key hoặc đếm ngược hồi phục!`;
+      } else if (res.status === 403 || lowerMsg.includes('permission_denied')) {
+        msg = `Lỗi 403 Permission Denied: Key không có quyền sử dụng mô hình này hoặc tính năng Generative Language API chưa được bật.`;
+      } else if (res.status === 404 || lowerMsg.includes('not found')) {
+        msg = `Lỗi 404: Mô hình "${validModel}" không tìm thấy hoặc chưa khả dụng cho Key này.`;
       }
 
-      let msg = errJson.error?.message || `HTTP ${res.status}`;
-      if (msg.toLowerCase().includes('invalid argument') || msg.toLowerCase().includes('api key not valid')) {
-        msg = `API Key / Access Token không hợp lệ hoặc đã hết hạn (${cleanKeyVal.slice(0, 10)}...). Vui lòng kiểm tra lại Key trên Google AI Studio!`;
-      }
       const err = new Error(msg);
       err.status = res.status;
+      err.rawMessage = rawMsg;
       throw err;
     }
 
@@ -2268,8 +2381,9 @@
   async function loadKeys() {
     try {
       const parsed = await idbGetAll(STORES.KEYS);
-      appState.keys = parsed.map(k => ({
+      appState.keys = (parsed || []).map((k, i) => ({
         ...k,
+        id: k.id ? String(k.id) : ('key_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2, 5)),
         key: k.type === 'service_account' ? k.key : cleanApiKey(k.key)
       }));
     } catch (e) {
@@ -2408,15 +2522,21 @@
   }
 
   function deleteKey(id) {
-    appState.keys = appState.keys.filter(k => k.id !== id);
+    if (!id) return;
+    appState.keys = appState.keys.filter(k => String(k.id) !== String(id));
     saveKeys();
-    showToast('Đã xoá API Key', 'success');
+    showToast('Đã xoá API Key thành công!', 'success');
   }
 
   function clearErrorKeys() {
+    const errorKeys = appState.keys.filter(k => k.status === 'error');
+    if (errorKeys.length === 0) {
+      showToast('Không có API Key nào bị lỗi!', 'info');
+      return;
+    }
     appState.keys = appState.keys.filter(k => k.status !== 'error');
     saveKeys();
-    showToast('Đã xoá tất cả key bị lỗi', 'success');
+    showToast(`Đã xoá ${errorKeys.length} API Key bị lỗi!`, 'success');
   }
 
   function deleteAllKeys() {
@@ -2658,37 +2778,24 @@
       const endTime = performance.now();
       const latency = Math.round(endTime - startTime);
       
-      if (res.ok) {
-        keyObj.status = 'active';
-        keyObj.latencyMs = latency;
-        keyObj.errorMsg = '';
-        saveKeys();
-        showToast(`Key hoạt động tốt! 🟢 (${latency} ms)`, 'success');
-      } else if (res.status === 429) {
+      keyObj.status = 'active';
+      keyObj.latencyMs = latency;
+      keyObj.errorMsg = '';
+      saveKeys();
+      showToast(`Key hoạt động tốt! 🟢 (${latency} ms)`, 'success');
+    } catch (e) {
+      if (e.status === 429 || (e.message && e.message.includes('429'))) {
         keyObj.status = 'rate_limited';
         keyObj.cooldownUntil = Date.now() + 60000;
         keyObj.errorMsg = '429 Rate Limit';
         saveKeys();
         showToast('Key bị lỗi 429 Rate Limit (Bắt đầu đếm ngược 60s)!', 'warning');
       } else {
-        const errText = await res.text();
-        let errMsg = `HTTP ${res.status}`;
-        try {
-          const errJson = JSON.parse(errText);
-          if (errJson.error?.message) {
-            errMsg = errJson.error.message;
-          }
-        } catch(e){}
         keyObj.status = 'error';
-        keyObj.errorMsg = errMsg;
+        keyObj.errorMsg = e.message || 'Lỗi kiểm tra Key';
         saveKeys();
-        showToast(`Key bị lỗi ${res.status}: ${errMsg}`, 'danger');
+        showToast(`Key lỗi: ${e.message}`, 'danger');
       }
-    } catch (e) {
-      keyObj.status = 'error';
-      keyObj.errorMsg = e.message || 'Lỗi kiểm tra Key';
-      saveKeys();
-      showToast(`Key lỗi: ${e.message}`, 'danger');
     }
   }
 
@@ -2714,21 +2821,20 @@
         const endTime = performance.now();
         const latency = Math.round(endTime - startTime);
 
-        if (res.ok) {
-          keyObj.status = 'active';
-          keyObj.latencyMs = latency;
-          keyObj.errorMsg = '';
-        } else if (res.status === 429) {
+        keyObj.status = 'active';
+        keyObj.latencyMs = latency;
+        keyObj.errorMsg = '';
+      } catch (e) {
+        if (e.status === 429 || (e.message && e.message.includes('429'))) {
           keyObj.status = 'rate_limited';
           keyObj.cooldownUntil = Date.now() + 60000;
           keyObj.latencyMs = 99999;
+          keyObj.errorMsg = '429 Rate Limit';
         } else {
           keyObj.status = 'error';
           keyObj.latencyMs = 99999;
+          keyObj.errorMsg = e.message;
         }
-      } catch (e) {
-        keyObj.status = 'error';
-        keyObj.latencyMs = 99999;
       }
     }
 
@@ -2938,6 +3044,21 @@
       activeOutline = null;
       document.getElementById('outline-editor-screen').style.display = 'none';
       document.getElementById('story-form').style.display = 'block';
+    }
+  }
+
+  function deleteCurrentOutlineScript() {
+    if (!activeOutline) return;
+    const title = activeOutline.title || 'kịch bản này';
+    if (confirm(`⚠️ Vui lòng xác nhận: Bạn có chắc chắn muốn XÓA DÀN Ý & KỊCH BẢN "${title}"?`)) {
+      if (activeOutline.id) {
+        appState.stories = appState.stories.filter(s => String(s.id) !== String(activeOutline.id));
+        saveStories();
+      }
+      activeOutline = null;
+      document.getElementById('outline-editor-screen').style.display = 'none';
+      document.getElementById('story-form').style.display = 'block';
+      showToast('Đã xóa kịch bản và dàn ý thành công!', 'success');
     }
   }
 
@@ -3256,29 +3377,141 @@ Trả về DUY NHẤT một chuỗi JSON:
     }
   }
 
-  function saveOutlineAndWriteLater() {
-    if (!activeOutline) return;
+  function saveCurrentProjectToLibrary() {
+    if (activeOutline) {
+      // Sync form edits from active outline editor if inputs were changed
+      const titleInput = document.getElementById('editor-story-title')?.value?.trim();
+      const genreInput = document.getElementById('editor-story-genre')?.value?.trim();
+      const outlineInput = document.getElementById('editor-story-outline')?.value?.trim();
 
+      if (titleInput) activeOutline.title = titleInput;
+      if (genreInput) activeOutline.genre = genreInput;
+      if (outlineInput) activeOutline.outline = outlineInput;
+
+      const storyId = activeOutline.id || ('story_' + Date.now());
+      const existingIdx = appState.stories.findIndex(s => s.id === storyId);
+
+      const storyObj = {
+        id: storyId,
+        title: activeOutline.title || 'Dự Án Truyện Mới',
+        author: activeOutline.formData?.author || 'Gemini Studio',
+        genre: activeOutline.genre || 'Kịch Bản',
+        language: activeOutline.formData?.language || 'Tiếng Việt',
+        outline: activeOutline.outline || '',
+        review: 'Khung kịch bản chi tiết & dàn ý đã lưu đầy đủ. Mở lại bất cứ lúc nào để sửa đổi hoặc viết từng chương.',
+        chapters: activeOutline.chapters || [],
+        coverBase64: activeOutline.formData?.coverBase64 || appState.coverBase64,
+        formData: activeOutline.formData,
+        createdAt: activeOutline.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      activeOutline.id = storyId;
+
+      if (existingIdx !== -1) {
+        appState.stories[existingIdx] = storyObj;
+      } else {
+        appState.stories.unshift(storyObj);
+      }
+
+      saveStories();
+      showToast(`🎉 Đã lưu toàn bộ dàn ý chi tiết & dự án "${storyObj.title}" vào Thư Viện!`, 'success');
+      return storyObj;
+    }
+
+    // Save directly from Creation Form before generating outline
+    const ideaText = document.getElementById('story-idea')?.value?.trim();
+    if (!ideaText) {
+      showToast('Vui lòng nhập ý tưởng hoặc kịch bản truyện trước khi lưu dự án!', 'warning');
+      return null;
+    }
+
+    const chapterMode = document.getElementById('story-chapters-mode')?.value || 'auto';
+    let chapterVal = 'auto';
+    if (chapterMode === 'custom') {
+      const inputVal = parseInt(document.getElementById('story-chapters-custom')?.value, 10);
+      chapterVal = (!isNaN(inputVal) && inputVal > 0) ? inputVal : 'auto';
+    }
+
+    const selectedStyleId = document.getElementById('story-style-select')?.value || 'default';
+    const genreVal = document.getElementById('story-genre').value;
+    const authorVal = document.getElementById('story-author').value.trim() || 'Gemini Studio';
+    const povVal = document.getElementById('story-pov').value;
+    const langVal = document.getElementById('story-language').value;
+
+    const formData = {
+      idea: ideaText,
+      genre: genreVal,
+      pov: povVal,
+      language: langVal,
+      author: authorVal,
+      chapterCount: chapterVal,
+      writingStyleId: selectedStyleId,
+      checkLogic: document.getElementById('check-logic-checkbox')?.checked,
+      coverBase64: appState.coverBase64
+    };
+
+    const projectTitle = 'Dự Án: ' + (ideaText.length > 30 ? ideaText.slice(0, 30) + '...' : ideaText);
     const storyObj = {
       id: 'story_' + Date.now(),
-      title: activeOutline.title || 'Khung Kịch Bản Mới',
-      author: activeOutline.formData.author || 'Gemini Studio',
-      genre: activeOutline.genre || 'Kịch Bản',
-      language: activeOutline.formData.language || 'Tiếng Việt',
-      outline: activeOutline.outline || '',
-      review: 'Khung kịch bản chi tiết đã lưu. Bạn có thể cho AI viết từng chương trong Trình Đọc.',
-      chapters: activeOutline.chapters,
-      coverBase64: activeOutline.formData.coverBase64,
+      title: projectTitle,
+      author: authorVal,
+      genre: genreVal === 'auto' ? 'AI Tự Động Phân Tích' : genreVal,
+      language: langVal,
+      outline: ideaText,
+      review: 'Dự án ý tưởng đã lưu thành công vào Thư Viện. Nhấn "Dàn Ý & Kịch Bản" để khởi tạo dàn ý bất kỳ lúc nào.',
+      chapters: [],
+      coverBase64: appState.coverBase64,
+      formData: formData,
       createdAt: new Date().toISOString()
     };
 
     appState.stories.unshift(storyObj);
     saveStories();
 
-    showToast('Đã lưu khung kịch bản vào Thư Viện!', 'success');
-    resetStoryForm();
-    activeOutline = null;
-    openReader(storyObj);
+    showToast(`🎉 Đã lưu dự án truyện "${storyObj.title}" vào Thư Viện!`, 'success');
+    return storyObj;
+  }
+
+  function saveOutlineAndWriteLater() {
+    if (!activeOutline) return;
+    const storyObj = saveCurrentProjectToLibrary();
+    if (storyObj) {
+      resetStoryForm();
+      activeOutline = null;
+      openReader(storyObj);
+    }
+  }
+
+  function reopenOutlineEditorById(id) {
+    const story = appState.stories.find(s => s.id === id);
+    if (!story) {
+      showToast('Không tìm thấy dự án trong thư viện!', 'warning');
+      return;
+    }
+
+    activeOutline = {
+      id: story.id,
+      title: story.title,
+      genre: story.genre,
+      outline: story.outline || '',
+      createdAt: story.createdAt,
+      formData: story.formData || {
+        idea: story.outline || '',
+        genre: story.genre,
+        pov: story.pov || 'Ngôi thứ ba (Toàn trí)',
+        language: story.language || 'Tiếng Việt',
+        author: story.author || 'Gemini Studio',
+        chapterCount: story.chapters ? story.chapters.length : 'auto',
+        writingStyleId: 'default',
+        coverBase64: story.coverBase64
+      },
+      chapters: story.chapters ? JSON.parse(JSON.stringify(story.chapters)) : []
+    };
+
+    switchTab('create');
+    openOutlineEditor();
+    showToast(`📂 Đã mở lại toàn bộ dàn ý & kịch bản chi tiết của "${story.title}"`, 'info');
   }
 
   // Auto Retry Loop for Outline API
@@ -3748,7 +3981,11 @@ Trả về DUY NHẤT một chuỗi JSON hợp lệ theo đúng cấu trúc sau 
   // --- LIBRARY MANAGEMENT ---
   async function loadStories() {
     try {
-      appState.stories = await idbGetAll(STORES.STORIES);
+      const parsed = await idbGetAll(STORES.STORIES);
+      appState.stories = (parsed || []).map((s, i) => ({
+        ...s,
+        id: s.id ? String(s.id) : ('story_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2, 5))
+      }));
     } catch (e) {
       appState.stories = [];
     }
@@ -3763,7 +4000,11 @@ Trả về DUY NHẤT một chuỗi JSON hợp lệ theo đúng cấu trúc sau 
   // --- WRITING STYLE MANAGEMENT ---
   async function loadStyles() {
     try {
-      appState.styles = await idbGetAll(STORES.STYLES);
+      const parsed = await idbGetAll(STORES.STYLES);
+      appState.styles = (parsed || []).map((st, i) => ({
+        ...st,
+        id: st.id ? String(st.id) : ('style_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2, 5))
+      }));
     } catch (e) {
       appState.styles = [];
     }
@@ -3773,8 +4014,8 @@ Trả về DUY NHẤT một chuỗi JSON hợp lệ theo đúng cấu trúc sau 
 
   async function saveStyles() {
     // SECURITY & STORAGE EFFICIENCY: Ensure we ONLY store style profile rules, NEVER raw uploaded text or files
-    const sanitizedStyles = appState.styles.map(s => ({
-      id: s.id,
+    const sanitizedStyles = appState.styles.map((s, i) => ({
+      id: s.id ? String(s.id) : ('style_' + Date.now() + '_' + i),
       name: s.name,
       author: s.author || '',
       description: s.description || '',
@@ -3837,10 +4078,13 @@ Trả về DUY NHẤT một chuỗi JSON hợp lệ theo đúng cấu trúc sau 
   }
 
   function deleteStyle(id) {
-    if (confirm('Bạn có chắc chắn muốn xoá mẫu văn phong này khỏi danh sách?')) {
-      appState.styles = appState.styles.filter(s => s.id !== id);
+    if (!id) return;
+    const st = appState.styles.find(s => String(s.id) === String(id));
+    const name = st ? st.name : 'văn phong này';
+    if (confirm(`Bạn có chắc chắn muốn xoá mẫu văn phong "${name}" khỏi danh sách?`)) {
+      appState.styles = appState.styles.filter(s => String(s.id) !== String(id));
       saveStyles();
-      showToast('Đã xoá mẫu văn phong.', 'success');
+      showToast('Đã xoá mẫu văn phong thành công!', 'success');
     }
   }
 
@@ -4177,9 +4421,10 @@ HÃY PHÂN TÍCH VÀ TRẢ VỀ DUY NHẤT MỘT PHẢN HỒI JSON HỢP LỆ TH
             <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 12px; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
               ${escapeHtml(s.outline || '')}
             </p>
-            <div class="story-actions">
-              <button class="btn btn-primary btn-sm" style="flex-grow:1;" onclick="openReaderById('${s.id}')">📖 Đọc Sách</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteStory('${s.id}')">🗑️</button>
+            <div class="story-actions" style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="openReaderById('${s.id}')">📖 Đọc Sách</button>
+              <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="reopenOutlineEditorById('${s.id}')" title="Mở lại toàn bộ kịch bản chi tiết và dàn ý các chương">🎬 Dàn Ý & Kịch Bản</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteStory('${s.id}')" title="Xoá dự án">🗑️</button>
             </div>
           </div>
         </div>
@@ -4188,10 +4433,13 @@ HÃY PHÂN TÍCH VÀ TRẢ VỀ DUY NHẤT MỘT PHẢN HỒI JSON HỢP LỆ TH
   }
 
   function deleteStory(id) {
-    if (confirm('Bạn có chắc muốn xoá cuốn truyện này khỏi bộ nhớ trình duyệt?')) {
-      appState.stories = appState.stories.filter(s => s.id !== id);
+    if (!id) return;
+    const story = appState.stories.find(s => String(s.id) === String(id));
+    const title = story ? story.title : 'dự án này';
+    if (confirm(`Bạn có chắc chắn muốn xoá dự án "${title}" khỏi thư viện?`)) {
+      appState.stories = appState.stories.filter(s => String(s.id) !== String(id));
       saveStories();
-      showToast('Đã xoá truyện khỏi thư viện', 'success');
+      showToast('Đã xoá dự án khỏi thư viện thành công!', 'success');
     }
   }
 
@@ -4689,10 +4937,16 @@ HÃY PHÂN TÍCH VÀ TRẢ VỀ DUY NHẤT MỘT PHẢN HỒI JSON HỢP LỆ TH
   // --- LOREBOOK & WORLDBUILDING STORAGE ---
   async function loadLorebook() {
     try {
-      const savedChars = await idbGetAll(STORES.LOREBOOK);
-      if (Array.isArray(savedChars) && savedChars.length > 0) {
-        const chars = savedChars.filter(item => item && item.type === 'character');
-        const rules = savedChars.filter(item => item && item.type === 'world_rule');
+      const savedItems = await idbGetAll(STORES.LOREBOOK);
+      if (Array.isArray(savedItems) && savedItems.length > 0) {
+        const chars = savedItems.filter(item => item && item.type === 'character').map((c, i) => ({
+          ...c,
+          id: c.id ? String(c.id) : ('char_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2, 5))
+        }));
+        const rules = savedItems.filter(item => item && item.type === 'world_rule').map((w, i) => ({
+          ...w,
+          id: w.id ? String(w.id) : ('world_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2, 5))
+        }));
         appState.lorebook = { characters: chars, worldRules: rules };
       } else {
         appState.lorebook = { characters: [], worldRules: [] };
@@ -4871,10 +5125,13 @@ HÃY PHÂN TÍCH VÀ TRẢ VỀ DUY NHẤT MỘT PHẢN HỒI JSON HỢP LỆ TH
   }
 
   function deleteCharacter(id) {
-    if (confirm('Xóa nhân vật này khỏi Sổ Tay Lorebook?')) {
-      appState.lorebook.characters = appState.lorebook.characters.filter(c => c.id !== id);
+    if (!id) return;
+    const char = appState.lorebook.characters.find(c => String(c.id) === String(id));
+    const name = char ? char.name : 'nhân vật này';
+    if (confirm(`Xóa hồ sơ nhân vật "${name}" khỏi Sổ Tay Lorebook?`)) {
+      appState.lorebook.characters = appState.lorebook.characters.filter(c => String(c.id) !== String(id));
       saveLorebook();
-      showToast('Đã xóa nhân vật khỏi Sổ Tay!', 'success');
+      showToast('Đã xóa nhân vật khỏi Sổ Tay thành công!', 'success');
     }
   }
 
@@ -4931,10 +5188,13 @@ HÃY PHÂN TÍCH VÀ TRẢ VỀ DUY NHẤT MỘT PHẢN HỒI JSON HỢP LỆ TH
   }
 
   function deleteWorldRule(id) {
-    if (confirm('Xóa quy tắc thế giới này?')) {
-      appState.lorebook.worldRules = appState.lorebook.worldRules.filter(w => w.id !== id);
+    if (!id) return;
+    const rule = appState.lorebook.worldRules.find(w => String(w.id) === String(id));
+    const title = rule ? rule.title : 'quy tắc này';
+    if (confirm(`Xóa quy tắc thế giới "${title}"?`)) {
+      appState.lorebook.worldRules = appState.lorebook.worldRules.filter(w => String(w.id) !== String(id));
       saveLorebook();
-      showToast('Đã xóa quy tắc thế giới!', 'success');
+      showToast('Đã xóa quy tắc thế giới thành công!', 'success');
     }
   }
 
@@ -5606,6 +5866,364 @@ p { text-indent: 1.5em; margin-bottom: 0.8em; text-align: justify; }
         `).join('');
       }
     }
+  }
+
+  // --- PRESET STYLES (VOICE & GENRE TUNER) ---
+  const PRESET_STYLES = {
+    preset_kimdung: {
+      name: 'Kiếm Hiệp Kim Dung',
+      rules: 'Hành văn mang hào khí giang hồ cổ điển, võ học miêu tả uyển chuyển linh hoạt, đối thoại thi văn hàm súc, coi trọng tinh thần Tín - Nghĩa - Hiệp.'
+    },
+    preset_tutien: {
+      name: 'Tu Tiên Huyền Huyễn',
+      rules: 'Ngôn từ hoành tráng phong bão, miêu tả uy áp vạn giới, linh khí dồi dào, cảnh giới thăng tiến rõ rệt, khí thế áp đảo thiên địa.'
+    },
+    preset_trintham: {
+      name: 'Trinh Thám U Tối',
+      rules: 'Không khí u uất u ám, suy luận sắc bén tỉ mỉ, tập trung vào tâm lý tội phạm & góc khuất con người, nhịp độ căng thẳng dồn dập.'
+    },
+    preset_ngontinh: {
+      name: 'Ngôn Tình Lãng Mạn',
+      rules: 'Lời văn ngọt ngào tinh tế, đào sâu miêu tả ánh mắt cử chỉ, diễn biến tâm lý lãng mạn sâu sắc, giàu chất thơ.'
+    },
+    preset_vientuong: {
+      name: 'Viễn Tưởng Kịch Tính',
+      rules: 'Thuật ngữ khoa học công nghệ độc đáo, nhịp độ dồn dập kịch tính, quy mô vũ trụ kỳ vĩ, tư duy tương lai sắc bén.'
+    },
+    preset_haibua: {
+      name: 'Hài Bựa Tấu Hài',
+      rules: 'Hành văn dí dỏm vui nhộn, lồng ghép ngôn ngữ trend trẻ trung, tình huống oái oăm bất ngờ gây cười rớt hàm.'
+    }
+  };
+
+  // Generic JSON call helper using active keys
+  async function callGeminiGenericJson(promptText) {
+    const model = getSelectedModel();
+    let lastErr = null;
+
+    for (let i = 0; i < appState.keys.length; i++) {
+      const keyObj = appState.keys[i];
+      if (keyObj.status === 'rate_limited' && keyObj.cooldownUntil && Date.now() < keyObj.cooldownUntil) continue;
+      if (keyObj.status === 'error') continue;
+
+      try {
+        const payload = {
+          contents: [{ parts: [{ text: promptText }] }],
+          generationConfig: {
+            responseMimeType: "application/json",
+            temperature: 0.7
+          }
+        };
+        const res = await executeGeminiApiRequest(keyObj.key, model, payload, 'generateContent');
+        keyObj.status = 'active';
+        keyObj.lastUsed = new Date().toISOString();
+        saveKeys();
+
+        let text = res.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        if (text.startsWith('```json')) text = text.replace(/^```json/, '').replace(/```$/, '').trim();
+        else if (text.startsWith('```')) text = text.replace(/^```/, '').replace(/```$/, '').trim();
+
+        return JSON.parse(text);
+      } catch (err) {
+        if (err.status === 429 || err.message.includes('429')) {
+          keyObj.status = 'rate_limited';
+          keyObj.cooldownUntil = Date.now() + 60000;
+          saveKeys();
+        } else {
+          keyObj.status = 'error';
+          keyObj.errorMsg = err.message;
+          saveKeys();
+        }
+        lastErr = err;
+      }
+    }
+    throw new Error(lastErr ? lastErr.message : 'Không có API Key nào khả dụng!');
+  }
+
+  // --- ⚡ AI BRANCHING PLOT PROMPTER ---
+  function openBranchingPlotPrompterModal() {
+    const modal = document.getElementById('branching-plot-modal');
+    if (modal) modal.style.display = 'flex';
+    runAiBranchingPlotPrompter();
+  }
+
+  function closeBranchingPlotModal() {
+    const modal = document.getElementById('branching-plot-modal');
+    if (modal) modal.style.display = 'none';
+  }
+
+  async function runAiBranchingPlotPrompter() {
+    const loading = document.getElementById('branching-plot-loading');
+    const resultsBox = document.getElementById('branching-plot-results');
+    if (!loading || !resultsBox) return;
+
+    loading.style.display = 'block';
+    resultsBox.innerHTML = '';
+
+    let title = document.getElementById('editor-story-title')?.value || activeOutline?.title || 'Tác phẩm';
+    let genre = document.getElementById('editor-story-genre')?.value || activeOutline?.genre || 'Viễn tưởng';
+    let outline = document.getElementById('editor-story-outline')?.value || activeOutline?.outline || '';
+
+    let chapterSummaries = '';
+    if (activeOutline && activeOutline.chapters) {
+      chapterSummaries = activeOutline.chapters.map((c, i) => `Chương ${i+1}: ${c.chapterTitle || ''} - ${c.summary || ''}`).join('\n');
+    }
+
+    const promptText = `
+Bạn là một đạo diễn kịch bản & đại văn hào cố vấn sáng tác truyện.
+Hãy phân tích tác phẩm "${title}" (Thể loại: ${genre}).
+Tóm tắt hiện tại: ${outline}
+Diễn biến các chương trước:
+${chapterSummaries || 'Đang ở phần mở đầu cốt truyện'}
+
+YÊU CẦU: Tác giả đang bị "BÍ Ý TƯỞNG" nối tiếp. Hãy đề xuất ĐÚNG 3 kịch bản nhánh phát triển tiếp theo sắc nét, độc đáo theo 3 phong cách:
+1. "Bất Ngờ (Plot Twist)": Cú bẻ lái ngoạn mục, lật tẩy bí mật, thân phận ẩn giấu hoặc sự kiện đảo ngược tình thế.
+2. "Kịch Tính (Action/Conflict)": Bùng nổ nguy hiểm, xung đột dâng trào, nhân vật rơi vào thế ngàn cân treo sợi tóc.
+3. "Cảm Xúc (Emotional)": Chiều sâu nội tâm, thổ lộ tình cảm, mất mát hoặc sự liên kết gắn kết tâm hồn nhân vật.
+
+Trả về DUY NHẤT một mảng JSON với cấu trúc:
+[
+  {
+    "type": "plot_twist",
+    "badge": "🎭 Bất Ngờ (Plot Twist)",
+    "title": "Tên kịch bản bất ngờ ngắn gọn",
+    "description": "Chi tiết diễn biến và bước ngoặt bất ngờ...",
+    "prompt": "Gợi ý kịch bản chi tiết để chèn vào chương tiếp theo..."
+  },
+  {
+    "type": "action",
+    "badge": "💥 Kịch Tính (Action/Conflict)",
+    "title": "Tên kịch bản kịch tính ngắn gọn",
+    "description": "Chi tiết cuộc va chạm, xung đột nguy hiểm...",
+    "prompt": "Gợi ý kịch bản chi tiết để chèn vào chương tiếp theo..."
+  },
+  {
+    "type": "emotional",
+    "badge": "💖 Cảm Xúc (Emotional)",
+    "title": "Tên kịch bản cảm xúc ngắn gọn",
+    "description": "Chi tiết chuyển biến tâm lý và tình cảm...",
+    "prompt": "Gợi ý kịch bản chi tiết để chèn vào chương tiếp theo..."
+  }
+]
+`;
+
+    try {
+      const res = await callGeminiGenericJson(promptText);
+      loading.style.display = 'none';
+      if (!Array.isArray(res) || res.length === 0) {
+        resultsBox.innerHTML = `<p style="color:red; text-align:center;">Không thể khởi tạo gợi ý. Vui lòng thử lại!</p>`;
+        return;
+      }
+
+      resultsBox.innerHTML = res.map((b, idx) => `
+        <div class="card" style="border: 1px solid var(--border); background: var(--bg-card); padding: 16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:0.8rem; font-weight:700; padding:4px 10px; border-radius:9999px; background: rgba(79, 70, 229, 0.1); color: var(--primary);">
+              ${escapeHtml(b.badge || '⚡ Hướng ' + (idx+1))}
+            </span>
+            <span style="font-size:0.75rem; color:var(--text-muted);">Gợi ý AI #${idx+1}</span>
+          </div>
+          <h4 style="font-size:1.05rem; font-weight:700; color:var(--text-main); margin-bottom:6px;">
+            ${escapeHtml(b.title)}
+          </h4>
+          <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
+            ${escapeHtml(b.description)}
+          </p>
+          <div style="background:var(--bg-main); padding:10px 12px; border-radius:8px; border:1px solid var(--border); font-size:0.825rem; color:var(--text-main); margin-bottom:12px; font-style:italic;">
+            💬 "${escapeHtml(b.prompt)}"
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="applyBranchingPlotToOutline('${escapeJsString(b.prompt)}')">
+            👉 Áp Dụng Hướng Này Vào Kịch Bản
+          </button>
+        </div>
+      `).join('');
+
+    } catch (err) {
+      loading.style.display = 'none';
+      resultsBox.innerHTML = `<div style="color:red; text-align:center; padding:20px;">⚠️ Lỗi gợi ý kịch bản: ${escapeHtml(err.message)}</div>`;
+    }
+  }
+
+  function applyBranchingPlotToOutline(promptText) {
+    if (activeOutline) {
+      addBlankChapterToEditor();
+      const container = document.getElementById('editor-chapters-container');
+      const lastSummaryTextarea = container ? container.querySelector('.editor-chapter-card:last-child textarea') : null;
+      if (lastSummaryTextarea) {
+        lastSummaryTextarea.value = promptText;
+      }
+      showToast('✨ Đã thêm chương mới với kịch bản được chọn!', 'success');
+    } else {
+      const ideaInput = document.getElementById('story-idea');
+      if (ideaInput) {
+        ideaInput.value = (ideaInput.value ? ideaInput.value + '\n\n' : '') + '[Ý TƯỞNG TIẾP THEO]: ' + promptText;
+      }
+      showToast('✨ Đã chèn gợi ý vào ô ý tưởng cốt truyện!', 'success');
+    }
+    closeBranchingPlotModal();
+  }
+
+  // --- 🧠 CHARACTER CODEX & MIND MAP ---
+  let extractedCodexList = [];
+
+  function openCharacterCodexModal() {
+    const modal = document.getElementById('character-codex-modal');
+    if (modal) modal.style.display = 'flex';
+    if (extractedCodexList.length === 0) {
+      runAiExtractCharacterCodex();
+    }
+  }
+
+  function closeCharacterCodexModal() {
+    const modal = document.getElementById('character-codex-modal');
+    if (modal) modal.style.display = 'none';
+  }
+
+  async function runAiExtractCharacterCodex() {
+    const loading = document.getElementById('codex-loading');
+    const emptyState = document.getElementById('codex-empty-state');
+    const resultsContainer = document.getElementById('codex-results-container');
+    const saveBtn = document.getElementById('btn-save-codex-to-lore');
+
+    if (!loading) return;
+
+    loading.style.display = 'block';
+    emptyState.style.display = 'none';
+    resultsContainer.style.display = 'none';
+
+    let sourceText = '';
+    if (activeOutline) {
+      sourceText = `Tác phẩm: ${activeOutline.title}\nTóm tắt: ${activeOutline.outline}\n`;
+      if (activeOutline.chapters) {
+        sourceText += activeOutline.chapters.map(c => `[Chương: ${c.chapterTitle}] ${c.summary} ${c.content || ''}`).join('\n');
+      }
+    } else {
+      sourceText = document.getElementById('story-idea')?.value || '';
+    }
+
+    if (!sourceText.trim()) {
+      loading.style.display = 'none';
+      emptyState.style.display = 'block';
+      return;
+    }
+
+    const promptText = `
+Bạn là một chuyên gia phân tích kịch bản văn học.
+Hãy đọc kỹ nội dung tác phẩm sau và tự động trích xuất DANH SÁCH HỒ SƠ NHÂN VẬT & MA TRẬN MỐI QUAN HỆ (Character Codex & Mind Map):
+
+NỘI DUNG VĂN BẢN:
+${sourceText.slice(0, 8000)}
+
+YÊU CẦU TRÍCH XUẤT:
+Trả về DUY NHẤT mảng JSON các nhân vật xuất hiện:
+[
+  {
+    "name": "Tên nhân vật",
+    "role": "Nam chính / Nữ chính / Phản diện / Sư phụ / Đồng đội / Phụ",
+    "personality": "Mô tả ngắn về tính cách & động cơ",
+    "appearance": "Mô tả ngoại hình, vũ khí hoặc diện mạo",
+    "relationships": "Mối quan hệ với nhân vật khác (Ví dụ: Bạn thân của Lâm Phong, kẻ thù của Hắc Long)",
+    "scenes": "Tóm tắt ngắn các cảnh/chương xuất hiện quan trọng"
+  }
+]
+`;
+
+    try {
+      const res = await callGeminiGenericJson(promptText);
+      loading.style.display = 'none';
+      if (!Array.isArray(res) || res.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      extractedCodexList = res;
+      renderCodexResults(res);
+      resultsContainer.style.display = 'block';
+      if (saveBtn) saveBtn.style.display = 'inline-block';
+
+    } catch (err) {
+      loading.style.display = 'none';
+      emptyState.style.display = 'block';
+    }
+  }
+
+  function renderCodexResults(list) {
+    const container = document.getElementById('codex-results-container');
+    if (!container) return;
+
+    container.innerHTML = `
+      <div style="margin-bottom: 20px; background: var(--bg-main); padding: 14px 18px; border-radius: 12px; border: 1px solid var(--border);">
+        <h4 style="font-size:1rem; font-weight:700; color:var(--text-main); margin-bottom:8px;">
+          🕸️ Ma Trận Sơ Đồ Mối Quan Hệ (Mind Map Summary)
+        </h4>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          ${list.map(c => `
+            <span style="background:#10b98115; color:#059669; border:1px solid #10b98140; padding:6px 12px; border-radius:9999px; font-weight:600; font-size:0.825rem; display:inline-flex; align-items:center; gap:6px;">
+              👤 <strong>${escapeHtml(c.name)}</strong>
+              <span style="opacity:0.75; font-size:0.75rem;">(${escapeHtml(c.role || 'Nhân vật')})</span>
+            </span>
+          `).join('')}
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px;">
+        ${list.map(c => `
+          <div class="card" style="border:1px solid var(--border); position:relative; display:flex; flex-direction:column; justify-content:space-between; padding:16px;">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                <h4 style="font-size:1.05rem; font-weight:700; color:var(--text-main);">
+                  👤 ${escapeHtml(c.name)}
+                </h4>
+                <span style="background:var(--primary-light); color:var(--primary); font-size:0.75rem; padding:2px 8px; border-radius:9999px; font-weight:600;">
+                  ${escapeHtml(c.role || 'Nhân vật')}
+                </span>
+              </div>
+
+              <p style="font-size:0.825rem; color:var(--text-main); margin-bottom:6px; line-height:1.4;">
+                <strong>🧠 Tính cách:</strong> ${escapeHtml(c.personality || 'Chưa rõ')}
+              </p>
+              <p style="font-size:0.825rem; color:var(--text-main); margin-bottom:6px; line-height:1.4;">
+                <strong>🗡️ Ngoại hình:</strong> ${escapeHtml(c.appearance || 'Chưa rõ')}
+              </p>
+              <p style="font-size:0.825rem; color:#059669; margin-bottom:6px; line-height:1.4;">
+                <strong>🔗 Quan hệ:</strong> ${escapeHtml(c.relationships || 'Độc lập')}
+              </p>
+              ${c.scenes ? `
+                <p style="font-size:0.78rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  <strong>📍 Cảnh:</strong> ${escapeHtml(c.scenes)}
+                </p>
+              ` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  async function saveExtractedCodexToLorebook() {
+    if (!extractedCodexList || extractedCodexList.length === 0) return;
+
+    let addedCount = 0;
+    extractedCodexList.forEach((c, idx) => {
+      const exists = appState.lorebook.characters.some(existing => existing.name.toLowerCase() === c.name.toLowerCase());
+      if (!exists) {
+        appState.lorebook.characters.push({
+          id: 'char_' + Date.now() + '_' + idx + '_' + Math.random().toString(36).substr(2, 5),
+          name: c.name,
+          role: c.role || 'Nhân vật',
+          personality: c.personality || '',
+          appearance: c.appearance || '',
+          relations: c.relationships || '',
+          notes: c.scenes || '',
+          createdAt: new Date().toISOString()
+        });
+        addedCount++;
+      }
+    });
+
+    await saveLorebook();
+    showToast(`🎉 Đã đồng bộ ${addedCount} hồ sơ nhân vật mới vào Sổ Tay Lorebook!`, 'success');
+    closeCharacterCodexModal();
   }
 
   function updateUI() {
