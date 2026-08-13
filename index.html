@@ -1013,24 +1013,16 @@
         </div>
 
         <select class="model-selector" id="model-select" onchange="handleModelSelectChange(this)">
-          <optgroup label="🚀 Thế Hệ Gemini 3.x (Mới Nhất)">
-            <option value="gemini-3.6-flash">🌟 Gemini 3.6 Flash (Tốc độ & Hiệu năng cao)</option>
-            <option value="gemini-3.5-flash">⚡ Gemini 3.5 Flash (Thế hệ mới - Đột phá)</option>
-            <option value="gemini-3.0-flash">🔥 Gemini 3.0 Flash (Thế hệ mới - Siêu tốc)</option>
-            <option value="gemini-3.0-pro">🧠 Gemini 3.0 Pro (Thế hệ mới - Suy luận cao cấp)</option>
+          <optgroup label="🌟 Thế Hệ Gemini 3.x (Mặc Định & Khuyên Dùng)">
+            <option value="gemini-3.6-flash" selected>🌟 Gemini 3.6 Flash (Siêu tốc & Mạnh nhất)</option>
+            <option value="gemini-3.5-flash">⚡ Gemini 3.5 Flash (Thế hệ mới)</option>
+            <option value="gemini-3.0-flash">🔥 Gemini 3.0 Flash (Thế hệ mới)</option>
+            <option value="gemini-3.0-pro">🧠 Gemini 3.0 Pro (Suy luận cao cấp)</option>
           </optgroup>
           <optgroup label="⚡ Thế Hệ Gemini 2.x">
             <option value="gemini-2.5-flash">⚡ Gemini 2.5 Flash</option>
             <option value="gemini-2.5-pro">🧠 Gemini 2.5 Pro</option>
-            <option value="gemini-2.0-flash" selected>🚀 Gemini 2.0 Flash (Tốc độ cao & Khuyên dùng)</option>
-            <option value="gemini-2.0-flash-lite">🎈 Gemini 2.0 Flash Lite (Tiết kiệm Quota)</option>
-            <option value="gemini-2.0-pro-exp-02-05">🧪 Gemini 2.0 Pro Experimental</option>
-            <option value="gemini-2.0-flash-thinking-exp">🤔 Gemini 2.0 Flash Thinking (Suy luận sâu)</option>
-          </optgroup>
-          <optgroup label="🛡️ Thế Hệ Gemini 1.5 & Standard">
-            <option value="gemini-1.5-flash">⚡ Gemini 1.5 Flash (Tương thích 100% mọi Key)</option>
-            <option value="gemini-1.5-pro">🧠 Gemini 1.5 Pro (Suy luận & Sáng tác chuyên sâu)</option>
-            <option value="gemini-1.0-pro">📜 Gemini 1.0 Pro</option>
+            <option value="gemini-2.0-flash">🚀 Gemini 2.0 Flash</option>
           </optgroup>
           <optgroup label="⚙️ Tùy Chỉnh">
             <option value="custom">✍️ Nhập mã mô hình tùy chỉnh...</option>
@@ -1079,13 +1071,21 @@
               <p class="card-subtitle">Tự động chuyển key khác khi gặp lỗi 429 Rate Limit</p>
             </div>
             
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="btn btn-primary btn-sm" onclick="testKeyLatencyAndSort()" title="Đo độ trễ phản hồi (ms) của từng Key và tự động ưu tiên các Key nhanh nhất lên đầu">⚡ Đo Độ Trễ & Ưu Tiên Key</button>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+              <button class="btn btn-primary btn-sm" onclick="testAllKeys()">🧪 Kiểm Tra Tất Cả</button>
               <button class="btn btn-secondary btn-sm" onclick="triggerTxtUpload()">📂 Nhập File TXT</button>
-              <button class="btn btn-secondary btn-sm" onclick="testAllKeys()">🧪 Kiểm Tra Tất Cả</button>
-              <button class="btn btn-secondary btn-sm" onclick="exportKeysTxt()">📥 Xuất TXT</button>
-              <button class="btn btn-danger btn-sm" onclick="clearErrorKeys()">🗑️ Xoá Key Lỗi</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteAllKeys()" title="Xoá toàn bộ danh sách Key đã lưu">🔥 Xoá Tất Cả Key</button>
+              
+              <details style="position: relative; display: inline-block;">
+                <summary class="btn btn-secondary btn-sm" style="list-style: none; cursor: pointer; user-select: none;">
+                  ⚙️ Công Cụ Nâng Cao ▾
+                </summary>
+                <div style="position: absolute; right: 0; top: 100%; margin-top: 6px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow-lg); padding: 8px; z-index: 100; min-width: 210px; display: flex; flex-direction: column; gap: 6px;">
+                  <button class="btn btn-secondary btn-sm" onclick="testKeyLatencyAndSort()" style="justify-content: flex-start; text-align: left;" title="Đo độ trễ phản hồi (ms) của từng Key và tự động ưu tiên các Key nhanh nhất lên đầu">⚡ Đo Độ Trễ & Ưu Tiên Key</button>
+                  <button class="btn btn-secondary btn-sm" onclick="exportKeysTxt()" style="justify-content: flex-start; text-align: left;">📥 Xuất File TXT</button>
+                  <button class="btn btn-danger btn-sm" onclick="clearErrorKeys()" style="justify-content: flex-start; text-align: left;">🗑️ Xoá Key Lỗi</button>
+                  <button class="btn btn-danger btn-sm" onclick="deleteAllKeys()" style="justify-content: flex-start; text-align: left;" title="Xoá toàn bộ danh sách Key đã lưu">🔥 Xoá Tất Cả Key</button>
+                </div>
+              </details>
             </div>
           </div>
 
@@ -1094,17 +1094,14 @@
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>API Key / Account</th>
-                  <th>Trạng Thái</th>
-                  <th>Độ Trễ (Latency)</th>
-                  <th>Đếm Ngược 429</th>
-                  <th>Lần Cuối Dùng</th>
+                  <th>API Key / Tài Khoản</th>
+                  <th>Trạng Thái & Độ Trễ</th>
                   <th>Thao Tác</th>
                 </tr>
               </thead>
               <tbody id="keys-table-body">
                 <tr>
-                  <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 32px;">Chưa có API Key nào. Vui lòng thêm key ở trên.</td>
+                  <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 32px;">Chưa có API Key nào. Vui lòng thêm key ở trên.</td>
                 </tr>
               </tbody>
             </table>
@@ -1237,6 +1234,21 @@
               </div>
 
               <div class="form-group">
+                <label class="form-label">📝 Số Lượng Từ Trong 1 Chương</label>
+                <select id="story-word-count-mode" class="form-select" onchange="toggleWordCountInput()">
+                  <option value="1000-2000" selected>📝 Vừa Phải (~1000 - 2000 từ) [Mặc định tiêu chuẩn]</option>
+                  <option value="500-1000">⚡ Ngắn Gọn (~500 - 1000 từ) [Đọc nhanh, tiết tấu dồn dập]</option>
+                  <option value="2000-3500">📖 Tiêu Chuẩn Tiểu Thuyết (~2000 - 3500 từ) [Tâm lý & miêu tả sâu]</option>
+                  <option value="3500-5000">📚 Dài Chi Tiết (~3500 - 5000 từ) [Đối thoại & sự kiện phong phú]</option>
+                  <option value="5000-8000">🐉 Siêu Dài Sử Thi (~5000 - 8000+ từ) [Kỳ ảo, hoành tráng]</option>
+                  <option value="custom">✍️ Nhập Số Từ Tùy Chỉnh...</option>
+                </select>
+                <div id="custom-word-count-container" style="display: none; margin-top: 8px;">
+                  <input type="number" id="story-word-count-custom" class="form-input" min="200" max="20000" step="100" value="2500" placeholder="Nhập số từ mong muốn (VD: 1500, 3000, 6000...)">
+                </div>
+              </div>
+
+              <div class="form-group">
                 <label class="form-label">Ảnh Bìa Sách (Tuỳ chọn)</label>
                 <div class="cover-upload-box" onclick="document.getElementById('cover-file-input').click()">
                   <p id="cover-upload-text" style="font-size: 0.85rem; color: var(--text-muted);">📷 Nhấn vào đây để tải ảnh bìa (JPG/PNG)</p>
@@ -1320,6 +1332,17 @@
               <label class="form-label">Thể Loại</label>
               <input type="text" id="editor-story-genre" class="form-input">
             </div>
+            <div class="form-group">
+              <label class="form-label">📝 Số Từ Mục Tiêu Mỗi Chương</label>
+              <select id="editor-story-word-count" class="form-select" onchange="handleEditorWordCountChange(this)">
+                <option value="1000-2000">📝 Vừa Phải (~1000 - 2000 từ)</option>
+                <option value="500-1000">⚡ Ngắn Gọn (~500 - 1000 từ)</option>
+                <option value="2000-3500">📖 Tiêu Chuẩn Tiểu Thuyết (~2000 - 3500 từ)</option>
+                <option value="3500-5000">📚 Dài Chi Tiết (~3500 - 5000 từ)</option>
+                <option value="5000-8000">🐉 Siêu Dài Sử Thi (~5000 - 8000+ từ)</option>
+                <option value="custom">✍️ Nhập Số Từ Tùy Chỉnh...</option>
+              </select>
+            </div>
           </div>
 
           <div class="form-group full-width" style="margin-bottom: 20px;">
@@ -1358,18 +1381,27 @@
 
           <!-- Bottom Action Controls -->
           <div style="background: var(--bg-main); padding: 16px; border-radius: var(--radius); border: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px;">
-            <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin: 0;">
-              🚀 Lựa Chọn Phương Thức Viết Nội Dung Truyện:
+            <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin: 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <span>🚀 Lựa Chọn Phương Thức Viết & Xuất Bản Truyện:</span>
             </h4>
-            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-              <button type="button" class="btn btn-primary" onclick="generateAllChaptersFromEditor()" style="flex: 1; min-width: 200px; padding: 12px; font-size: 0.95rem; font-weight: 700;">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-primary" onclick="generateAllChaptersFromEditor()" style="flex: 1; min-width: 180px; padding: 12px; font-size: 0.95rem; font-weight: 700;">
                 ⚡ Viết Tất Cả Các Chương Tự Động
               </button>
-              <button type="button" class="btn btn-secondary" onclick="openCurrentBookInReader()" style="flex: 1; min-width: 200px; padding: 12px; font-size: 0.95rem; font-weight: 700; color: var(--primary); border: 1px solid var(--primary); background: rgba(79, 70, 229, 0.05);">
-                📖 Mở Trang Sách Đang Viết (Hiển Thị Các Chương)
+              <button type="button" class="btn btn-secondary" onclick="openCurrentBookInReader()" style="flex: 1; min-width: 180px; padding: 12px; font-size: 0.95rem; font-weight: 700; color: var(--primary); border: 1px solid var(--primary); background: rgba(79, 70, 229, 0.05);">
+                📖 Mở Trang Sách Đang Viết
               </button>
-              <button type="button" class="btn btn-secondary" onclick="saveOutlineAndWriteLater()" style="flex: 1; min-width: 200px; padding: 12px; font-size: 0.95rem; font-weight: 600;">
-                💾 Lưu Khung Kịch Bản Về Thư Viện
+              <button type="button" class="btn btn-secondary" onclick="exportActiveOutlineStory('epub')" style="padding: 12px; font-weight: 600;" title="Xuất file .epub cho Kindle/Kobo">
+                📱 Xuất EPUB
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="exportActiveOutlineStory('docx')" style="padding: 12px; font-weight: 600;" title="Xuất file .docx cho Word">
+                📄 Xuất DOCX
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="exportActiveOutlineStory('pdf')" style="padding: 12px; font-weight: 600;" title="Dàn trang in / xuất PDF">
+                🖨️ Xuất PDF
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="saveOutlineAndWriteLater()" style="flex: 1; min-width: 180px; padding: 12px; font-size: 0.95rem; font-weight: 600;">
+                💾 Lưu Về Thư Viện
               </button>
             </div>
           </div>
@@ -1670,17 +1702,27 @@
               <h2 class="chapter-heading" id="reader-chapter-title">Chương 1: Khởi Đầu</h2>
               
               <!-- Inline AI Editor & Manual Editing Bar -->
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:8px; background:var(--bg-card); padding:10px 14px; border-radius:8px; border:1px solid var(--border); box-shadow:var(--shadow-sm);">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px; background:var(--bg-card); padding:12px 16px; border-radius:12px; border:1px solid var(--border); box-shadow:var(--shadow-sm);">
                 <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                  <button class="btn btn-primary btn-sm" onclick="openInlineAiEditor('selected')">
-                    ⚡ Trợ Lý AI Chỉnh Sửa / Viết Tiếp Đoạn Này
+                  <span style="font-size:0.85rem; font-weight:700; color:var(--primary); margin-right:4px;">🪄 AI In-line Copilot:</span>
+                  <button class="btn btn-primary btn-sm" onclick="openInlineAiWithPreset('continue_300')" title="Viết tiếp khoảng 300 từ cho đoạn văn bản đang bôi đen hoặc vị trí hiện tại">
+                    ✍️ AI Viết Tiếp 300 Từ
+                  </button>
+                  <button class="btn btn-primary btn-sm" onclick="openInlineAiWithPreset('detail_emotion')" style="background:linear-gradient(135deg, #ec4899, #db2777); border:none; color:white;" title="Mở rộng và viết rõ diễn biến tình cảm, tâm lý nhân vật sâu sắc hơn">
+                    💕 AI Mở Rộng Diễn Biến Tình Cảm
+                  </button>
+                  <button class="btn btn-primary btn-sm" onclick="openInlineAiWithPreset('polish_emotion')" style="background:linear-gradient(135deg, #8b5cf6, #7c3aed); border:none; color:white;" title="Trau chuốt câu từ bay bổng, giàu cảm xúc hơn">
+                    ✨ AI Sửa Câu Văn Cho Cảm Xúc Hơn
+                  </button>
+                  <button class="btn btn-secondary btn-sm" onclick="openInlineAiEditor('selected')">
+                    ⚡ Tất Cả Thao Tác AI Copilot...
                   </button>
                   <button class="btn btn-secondary btn-sm" id="btn-toggle-manual-edit" onclick="toggleChapterManualEdit()">
-                    ✏️ Sửa Văn Bản Thủ Công
+                    ✏️ Sửa Thủ Công
                   </button>
                 </div>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">
-                  💡 Bôi đen bất kỳ đoạn văn nào rồi bấm nút "⚡ Trợ Lý AI" để sửa tại chỗ!
+                  💡 Bôi đen bất kỳ đoạn văn nào rồi chọn thao Tác Copilot ở trên!
                 </span>
               </div>
 
@@ -1801,12 +1843,15 @@
       </div>
 
       <div style="margin-bottom:16px;">
-        <label class="form-label">🎯 Chọn Thao Tác Chỉnh Sửa AI</label>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:8px;">
-          <button type="button" class="btn btn-secondary btn-sm inline-act-btn active" data-action="rewrite_dramatic" onclick="selectInlineAction('rewrite_dramatic')">🎭 Viết Lại Kịch Tính</button>
-          <button type="button" class="btn btn-secondary btn-sm inline-act-btn" data-action="add_dialogue" onclick="selectInlineAction('add_dialogue')">💬 Thêm Hội Thoại</button>
+        <label class="form-label">🎯 Chọn Thao Tác Chỉnh Sửa AI Copilot</label>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px;">
+          <button type="button" class="btn btn-secondary btn-sm inline-act-btn active" data-action="continue_300" onclick="selectInlineAction('continue_300')">✍️ AI Viết Tiếp 300 Từ</button>
+          <button type="button" class="btn btn-secondary btn-sm inline-act-btn" data-action="detail_emotion" onclick="selectInlineAction('detail_emotion')">💕 Mở Rộng Diễn Biến Tình Cảm</button>
+          <button type="button" class="btn btn-secondary btn-sm inline-act-btn" data-action="polish_emotion" onclick="selectInlineAction('polish_emotion')">✨ Sửa Câu Văn Cảm Xúc Hơn</button>
+          <button type="button" class="btn btn-secondary btn-sm inline-act-btn" data-action="rewrite_dramatic" onclick="selectInlineAction('rewrite_dramatic')">🎭 Viết Lại Kịch Tính</button>
+          <button type="button" class="btn btn-secondary btn-sm inline-act-btn" data-action="add_dialogue" onclick="selectInlineAction('add_dialogue')">💬 Thêm Hội Thoại Sinh Động</button>
           <button type="button" class="btn btn-secondary btn-sm inline-act-btn" data-action="detail_scene" onclick="selectInlineAction('detail_scene')">🌿 Miêu Tả Cảnh & Cảm Xúc</button>
-          <button type="button" class="btn btn-secondary btn-sm inline-act-btn" data-action="continue" onclick="selectInlineAction('continue')">✍️ Viết Tiếp Từ Đoạn Này</button>
+          <button type="button" class="btn btn-secondary btn-sm inline-act-btn" data-action="continue" onclick="selectInlineAction('continue')">✍️ Viết Nối Tiếp Đoạn Sau</button>
           <button type="button" class="btn btn-secondary btn-sm inline-act-btn" data-action="custom" onclick="selectInlineAction('custom')">✏️ Lệnh Tùy Chỉnh...</button>
         </div>
       </div>
@@ -2205,10 +2250,88 @@
     loadReaderSettings();
     startCooldownTicker();
     updateUI();
+
+    // 🔄 Restore Last Session
+    await restoreActiveSessionState();
   });
+
+  // --- SESSION PERSISTENCE (LƯU & KHÔI PHỤC PHIÊN LÀM VIỆC MỞ TRƯỚC) ---
+  function saveActiveSessionState() {
+    try {
+      const sessionData = {
+        lastTab: appState.currentTab || 'create',
+        activeOutlineId: activeOutline ? activeOutline.id : null,
+        activeReaderStoryId: appState.currentStory ? appState.currentStory.id : null,
+        activeReaderChapterIndex: (appState.currentChapterIndex !== undefined) ? appState.currentChapterIndex : -1,
+        selectedModel: getSelectedModel(),
+        customModelName: customModelName
+      };
+      localStorage.setItem('gemini_studio_last_session', JSON.stringify(sessionData));
+    } catch (e) {
+      console.warn('Lỗi khi lưu phiên làm việc:', e);
+    }
+  }
+
+  async function restoreActiveSessionState() {
+    try {
+      const savedStr = localStorage.getItem('gemini_studio_last_session');
+      if (!savedStr) {
+        switchTab('create');
+        return;
+      }
+      const session = JSON.parse(savedStr);
+
+      if (session.customModelName) {
+        customModelName = session.customModelName;
+      }
+      if (session.selectedModel) {
+        const modelSelect = document.getElementById('model-select');
+        if (modelSelect) {
+          if (Array.from(modelSelect.options).some(o => o.value === session.selectedModel)) {
+            modelSelect.value = session.selectedModel;
+          } else {
+            modelSelect.value = 'custom';
+            let customOpt = modelSelect.querySelector('option[value="custom"]');
+            if (customOpt) customOpt.textContent = `✍️ Tùy chỉnh: ${session.selectedModel}`;
+          }
+        }
+      }
+
+      // Restore Active Outline if saved
+      if (session.activeOutlineId && appState.stories.length > 0) {
+        const foundOutline = appState.stories.find(s => String(s.id) === String(session.activeOutlineId));
+        if (foundOutline) {
+          activeOutline = foundOutline;
+        }
+      }
+
+      const targetTab = session.lastTab || 'create';
+
+      if (targetTab === 'reader' && session.activeReaderStoryId) {
+        const foundReaderStory = appState.stories.find(s => String(s.id) === String(session.activeReaderStoryId));
+        if (foundReaderStory) {
+          openReader(foundReaderStory);
+          if (typeof session.activeReaderChapterIndex === 'number') {
+            jumpToChapter(session.activeReaderChapterIndex);
+          }
+        } else {
+          switchTab('create');
+        }
+      } else {
+        switchTab(targetTab);
+        if (targetTab === 'create' && activeOutline) {
+          openOutlineEditor();
+        }
+      }
+    } catch (e) {
+      console.warn('Lỗi khi khôi phục phiên làm việc mở trước:', e);
+      switchTab('create');
+    }
+  }
 
   // --- TAB SWITCHING ---
   function switchTab(tabId) {
+    appState.currentTab = tabId;
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
 
@@ -2235,21 +2358,24 @@
     } else if (tabId === 'reader') {
       applyAllReaderSettings();
     }
+
+    saveActiveSessionState();
   }
 
   let customModelName = '';
 
   function handleModelSelectChange(selectElem) {
     if (selectElem.value === 'custom') {
-      const input = prompt('✍️ Nhập tên mô hình Gemini tùy chỉnh (Ví dụ: gemini-3.6-flash, gemini-2.0-pro-exp-02-05, gemini-experimental):', customModelName || 'gemini-3.6-flash');
+      const input = prompt('✍️ Nhập tên mô hình Gemini tùy chỉnh (Ví dụ: gemini-3.6-flash, gemini-3.0-pro, gemini-experimental):', customModelName || 'gemini-3.6-flash');
       if (input && input.trim()) {
         customModelName = input.trim();
         let opt = selectElem.querySelector('option[value="custom"]');
         if (opt) opt.textContent = `✍️ Tùy chỉnh: ${customModelName}`;
       } else {
-        selectElem.value = 'gemini-2.0-flash';
+        selectElem.value = 'gemini-3.6-flash';
       }
     }
+    saveActiveSessionState();
   }
 
   function getSelectedModel() {
@@ -2258,7 +2384,7 @@
     if (val === 'custom' && customModelName) {
       return customModelName;
     }
-    return val || 'gemini-2.0-flash';
+    return val || 'gemini-3.6-flash';
   }
 
   // --- KEY SANITIZER & UNIVERSAL PARSER ---
@@ -2695,37 +2821,23 @@
     document.getElementById('key-count-badge').innerText = appState.keys.length;
 
     if (appState.keys.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 32px;">Chưa có API Key nào. Vui lòng thêm key ở trên.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 32px;">Chưa có API Key nào. Vui lòng thêm key ở trên.</td></tr>`;
       return;
     }
 
     tbody.innerHTML = appState.keys.map((k, index) => {
       let statusBadge = '<span class="badge badge-success">🟢 Hoạt Động</span>';
       if (k.status === 'rate_limited') {
-        statusBadge = '<span class="badge badge-warning">🟡 429 Rate Limit</span>';
+        const remaining = k.cooldownUntil ? Math.max(0, Math.ceil((k.cooldownUntil - Date.now()) / 1000)) : 0;
+        statusBadge = `<span class="badge badge-warning">🟡 Rate Limit (<span id="cd-${k.id}">${remaining}s</span>)</span>`;
       } else if (k.status === 'error') {
         const titleText = escapeHtml(k.errorMsg || 'Lỗi 400 Bad Request');
         statusBadge = `<span class="badge badge-danger" title="${titleText}">🔴 Lỗi (${escapeHtml(k.errorMsg || '400')})</span>`;
+      } else if (k.latencyMs && k.status === 'active') {
+        statusBadge = `<span class="badge badge-success" title="Độ trễ ${k.latencyMs}ms">🟢 Hoạt Động (⚡ ${k.latencyMs}ms)</span>`;
       }
 
-      let latencyBadge = '<span style="color:var(--text-muted); font-size:0.8rem;">Chưa đo</span>';
-      if (k.latencyMs && k.status === 'active') {
-        if (k.latencyMs < 800) {
-          latencyBadge = `<span class="badge badge-success" title="Phản hồi cực nhanh">⚡ ${k.latencyMs} ms (Siêu nhanh)</span>`;
-        } else if (k.latencyMs < 2000) {
-          latencyBadge = `<span class="badge badge-success" style="background:#e0e7ff; color:#3730a3;" title="Tốc độ bình thường">🚀 ${k.latencyMs} ms</span>`;
-        } else {
-          latencyBadge = `<span class="badge badge-warning" title="Phản hồi chậm">🐢 ${k.latencyMs} ms (Chậm)</span>`;
-        }
-      }
-
-      let countdownText = '-';
-      if (k.status === 'rate_limited' && k.cooldownUntil) {
-        const remaining = Math.max(0, Math.ceil((k.cooldownUntil - Date.now()) / 1000));
-        countdownText = `<strong style="color:var(--warning);">${remaining}s</strong>`;
-      }
-
-      const lastUsed = k.lastUsed ? new Date(k.lastUsed).toLocaleTimeString() : 'Chưa dùng';
+      const lastUsedText = k.lastUsed ? new Date(k.lastUsed).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Chưa dùng';
 
       return `
         <tr>
@@ -2733,12 +2845,9 @@
           <td>
             <strong>${maskKey(k.key)}</strong>
             ${k.name ? `<span style="font-size:0.75rem; color:var(--primary); font-weight:500; display:block;">🏷️ ${escapeHtml(k.name)}</span>` : ''}
-            <span style="font-size:0.75rem; color:var(--text-muted); display:block;">${k.type}</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); display:inline-block; margin-top:2px;">Lần cuối dùng: ${lastUsedText}</span>
           </td>
           <td>${statusBadge}</td>
-          <td>${latencyBadge}</td>
-          <td id="cd-${k.id}">${countdownText}</td>
-          <td style="font-size:0.85rem;">${lastUsed}</td>
           <td>
             <button class="btn btn-secondary btn-sm" onclick="testSingleKey('${k.id}')">🧪 Test</button>
             <button class="btn btn-danger btn-sm" onclick="deleteKey('${k.id}')">🗑️ Xoá</button>
@@ -2754,7 +2863,7 @@
       const cell = document.getElementById(`cd-${k.id}`);
       if (cell && k.status === 'rate_limited' && k.cooldownUntil) {
         const remaining = Math.max(0, Math.ceil((k.cooldownUntil - now) / 1000));
-        cell.innerHTML = `<strong style="color:var(--warning);">${remaining}s</strong>`;
+        cell.innerText = `${remaining}s`;
       }
     });
   }
@@ -2913,6 +3022,55 @@
     }
   }
 
+  function toggleWordCountInput() {
+    const mode = document.getElementById('story-word-count-mode')?.value;
+    const container = document.getElementById('custom-word-count-container');
+    if (container) {
+      container.style.display = mode === 'custom' ? 'block' : 'none';
+    }
+  }
+
+  function handleEditorWordCountChange(selectElem) {
+    if (!activeOutline) return;
+    if (!activeOutline.formData) activeOutline.formData = {};
+
+    if (selectElem.value === 'custom') {
+      const currentVal = activeOutline.formData.wordCountCustom || 2500;
+      const val = prompt('✍️ Nhập số từ mục tiêu mong muốn cho 1 chương (VD: 1500, 2500, 4000, 6000...):', currentVal);
+      if (val && !isNaN(parseInt(val, 10)) && parseInt(val, 10) >= 200) {
+        activeOutline.formData.wordCountMode = 'custom';
+        activeOutline.formData.wordCountCustom = parseInt(val, 10);
+        let customOpt = selectElem.querySelector('option[value="custom"]');
+        if (customOpt) customOpt.textContent = `✍️ Tùy chọn: ~${activeOutline.formData.wordCountCustom} từ`;
+        showToast(`🎯 Cài đặt mục tiêu: ~${activeOutline.formData.wordCountCustom} từ / chương`, 'success');
+      } else {
+        selectElem.value = activeOutline.formData.wordCountMode || '1000-2000';
+      }
+    } else {
+      activeOutline.formData.wordCountMode = selectElem.value;
+      showToast(`🎯 Đã cập nhật mẫu độ dài chương!`, 'info');
+    }
+  }
+
+  function getChapterWordCountPrompt(wordCountMode, customVal) {
+    if (wordCountMode === 'custom' && customVal) {
+      return `ĐỘ DÀI YÊU CẦU CHO CHƯƠNG: Hãy triển khai chi tiết sâu sắc để văn bản chương đạt ĐÚNG KHOẢNG ~${customVal} TỪ. Mở rộng diễn biến tâm lý, chi tiết bối cảnh và hội thoại phong phú.`;
+    }
+    switch (wordCountMode) {
+      case '500-1000':
+        return `ĐỘ DÀI YÊU CẦU CHO CHƯƠNG: Ngắn gọn, súc tích khoảng 500 - 1000 từ. Tiết tấu dồn dập, tập trung vào sự kiện chính.`;
+      case '2000-3500':
+        return `ĐỘ DÀI YÊU CẦU CHO CHƯƠNG: Tiêu chuẩn tiểu thuyết mạng chuyên nghiệp khoảng 2000 - 3500 từ. Mở rộng diễn biến bối cảnh, hội thoại sinh động và miêu tả nội tâm nhân vật sâu sắc.`;
+      case '3500-5000':
+        return `ĐỘ DÀI YÊU CẦU CHO CHƯƠNG: Dài và chi tiết phong phú khoảng 3500 - 5000 từ. Triển khai kỹ từng phân cảnh, nút thắt và chiều sâu tâm lý.`;
+      case '5000-8000':
+        return `ĐỘ DÀI YÊU CẦU CHO CHƯƠNG: Siêu dài sử thi đồ sộ khoảng 5000 - 8000+ từ. Viết cực kỳ tỉ mỉ, bao quát cao trào, hội thoại đa chiều và tình tiết hoành tráng.`;
+      case '1000-2000':
+      default:
+        return `ĐỘ DÀI YÊU CẦU CHO CHƯƠNG: Vừa phải chuẩn mực khoảng 1000 - 2000 từ. Cân đối mượt mà giữa tình tiết, miêu tả bối cảnh và đối thoại.`;
+    }
+  }
+
   // --- GEMINI STORY GENERATOR LOGIC (OUTLINE & FULL) ---
   async function handleGenerateStory(mode = 'outline') {
     const activeKeys = appState.keys.filter(k => k.status === 'active' || (k.status === 'rate_limited' && Date.now() >= k.cooldownUntil));
@@ -2936,6 +3094,10 @@
     }
 
     const selectedStyleId = document.getElementById('story-style-select')?.value || 'default';
+    const wordCountMode = document.getElementById('story-word-count-mode')?.value || '1000-2000';
+    let wordCountCustom = parseInt(document.getElementById('story-word-count-custom')?.value, 10);
+    if (isNaN(wordCountCustom) || wordCountCustom < 200) wordCountCustom = 2500;
+
     const formData = {
       idea: ideaText,
       genre: document.getElementById('story-genre').value,
@@ -2943,6 +3105,8 @@
       language: document.getElementById('story-language').value,
       author: document.getElementById('story-author').value.trim() || 'Gemini Studio',
       chapterCount: chapterVal,
+      wordCountMode: wordCountMode,
+      wordCountCustom: wordCountCustom,
       writingStyleId: selectedStyleId,
       checkLogic: document.getElementById('check-logic-checkbox').checked,
       coverBase64: appState.coverBase64
@@ -3058,6 +3222,16 @@
     document.getElementById('editor-story-title').value = activeOutline.title || '';
     document.getElementById('editor-story-genre').value = activeOutline.genre || '';
     document.getElementById('editor-story-outline').value = activeOutline.outline || '';
+    
+    const editorWordSelect = document.getElementById('editor-story-word-count');
+    if (editorWordSelect) {
+      const mode = activeOutline.formData?.wordCountMode || '1000-2000';
+      editorWordSelect.value = mode;
+      if (mode === 'custom' && activeOutline.formData?.wordCountCustom) {
+        let customOpt = editorWordSelect.querySelector('option[value="custom"]');
+        if (customOpt) customOpt.textContent = `✍️ Tùy chọn: ~${activeOutline.formData.wordCountCustom} từ`;
+      }
+    }
 
     // Bind event listeners for outline meta
     document.getElementById('editor-story-title').oninput = (e) => activeOutline.title = e.target.value;
@@ -3065,6 +3239,7 @@
     document.getElementById('editor-story-outline').oninput = (e) => activeOutline.outline = e.target.value;
 
     renderEditorChapters();
+    saveActiveSessionState();
   }
 
   function cancelOutlineEditor() {
@@ -3072,6 +3247,7 @@
       activeOutline = null;
       document.getElementById('outline-editor-screen').style.display = 'none';
       document.getElementById('story-form').style.display = 'block';
+      saveActiveSessionState();
     }
   }
 
@@ -3086,6 +3262,7 @@
       activeOutline = null;
       document.getElementById('outline-editor-screen').style.display = 'none';
       document.getElementById('story-form').style.display = 'block';
+      saveActiveSessionState();
       showToast('Đã xóa kịch bản và dàn ý thành công!', 'success');
     }
   }
@@ -3566,6 +3743,42 @@ Trả về DUY NHẤT một chuỗi JSON:
     showToast(`📂 Đã mở lại toàn bộ dàn ý & kịch bản chi tiết của "${story.title}"`, 'info');
   }
 
+  // --- SANITIZER FOR STORY CONTENT ---
+  function cleanStoryTextOutput(str) {
+    if (!str) return '';
+    let text = String(str);
+
+    // 1. Remove any Chinese characters (Hán tự / 中文字)
+    text = text.replace(/[\u4e00-\u9fa5\u3400-\u4dbf]/g, '');
+
+    // 2. Remove forbidden markdown and garbage characters (*, **, #, `, ~, --, —)
+    text = text.replace(/\*+/g, '');
+    text = text.replace(/#+/g, '');
+    text = text.replace(/`+/g, '');
+    text = text.replace(/~+/g, '');
+    text = text.replace(/--+/g, ' ');
+    text = text.replace(/—+/g, ', ');
+
+    // Remove leading bullet dashes or hyphens from line starts
+    text = text.replace(/^[ \t]*[-–—]+[ \t]*/gm, '');
+
+    // Replace standalone hyphens surrounded by spaces
+    text = text.replace(/ - /g, ' ');
+
+    // Clean up dotted ellipsis combinations like ". ...", ". . .", "...", ". . ."
+    text = text.replace(/\.\s*\.\.\./g, '.');
+    text = text.replace(/\.\.\.\./g, '.');
+    text = text.replace(/\.\.\./g, '.');
+    text = text.replace(/\.\s*\.\s*\./g, '.');
+
+    // 3. Clean up multiple spaces and excessive empty lines
+    text = text.replace(/[ \t]{2,}/g, ' ');
+    text = text.replace(/ \n/g, '\n');
+    text = text.replace(/\n{3,}/g, '\n\n');
+
+    return text.trim();
+  }
+
   // Auto Retry Loop for Outline API
   async function callGeminiOutlineWithAutoRetry(formData, logFn) {
     const model = getSelectedModel();
@@ -3625,6 +3838,8 @@ Trả về DUY NHẤT một chuỗi JSON:
       lorebookPrompt = buildLorebookPromptContext();
     }
 
+    const wordCountInstruction = getChapterWordCountPrompt(formData.wordCountMode, formData.wordCountCustom);
+
     const systemPrompt = `
 Hãy đóng vai một nhà biên kịch & đại văn hào chuyên nghiệp với ngôn ngữ Tiếng Việt sắc nét, mượt mà.
 Nhiệm vụ: Phân tích kịch bản/ý tưởng từ tác giả và lập DÀN Ý TỔNG THỂ & KỊCH BẢN CHI TIẾT DÀNH CHO TỪNG CHƯƠNG.
@@ -3636,13 +3851,16 @@ Nhiệm vụ: Phân tích kịch bản/ý tưởng từ tác giả và lập DÀ
 - NGÔN NGỮ: ${formData.language}
 - TÁC GIẢ KHỞI TẠO: ${formData.author}
 - SỐ CHƯƠNG YÊU CẦU: ${chapterInstruction}
+- MỤC TIÊU ĐỘ DÀI MỖI CHƯƠNG: ${wordCountInstruction}
 ${styleInstruction}
 ${lorebookPrompt}
 
-🎯 NGUYÊN TẮC LẬP KỊCH BẢN:
-1. Đảm bảo chính tả Tiếng Việt 100% chuẩn mực.
-2. Tóm tắt cốt truyện tổng thể súc tích, lôi cuốn.
-3. Kịch bản từng chương (summary) phải thật chi tiết: Nêu rõ bối cảnh, sự kiện chính, xung đột/cao trào, nhân vật và cái kết của chương đó.
+🎯 NGUYÊN TẮC BẮT BUỘC KHÔNG THỂ VI PHẠM (CRITICAL):
+1. 🔤 CHÍNH TẢ & NGỮ PHÁP TIẾNG VIỆT HOÀN HẢO 100%: Tuyệt đối không sai chính tả, không dùng từ viết ngọng hay lỗi đánh máy.
+2. 🚫 KHÔNG CHỨA KÝ TỰ RÁC (- -- * ** . ...): Tuyệt đối KHÔNG dùng các ký tự -, --, *, **, . ... trong văn bản kịch bản hay tóm tắt.
+3. 🈲 TUYỆT ĐỐI KHÔNG CHỨA CHỮ TIẾNG TRUNG QUỐC: Không lẫn lộn bất kỳ ký tự Hán tự / Trung Quốc nào. Tên riêng và thuật ngữ phải dùng Tiếng Việt / Hán-Việt rõ ràng.
+4. ⏳ TỪ NGỮ ĐÚNG BỐI CẢNH VÀ THỜI GIAN CỦA TRUYỆN: Dùng từ ngữ, xưng hô và văn phong bám sát chính xác bối cảnh lịch sử, thời đại của truyện.
+5. 📝 Tóm tắt cốt truyện tổng thể súc tích, lôi cuốn. Kịch bản từng chương (summary) phải thật chi tiết: Nêu rõ bối cảnh, sự kiện chính, xung đột/cao trào và diễn biến.
 
 Trả về DUY NHẤT một chuỗi JSON hợp lệ theo đúng cấu trúc (không kèm markdown dư thừa):
 {
@@ -3687,7 +3905,19 @@ Trả về DUY NHẤT một chuỗi JSON hợp lệ theo đúng cấu trúc (kh�
     if (cleanJson.startsWith('```json')) cleanJson = cleanJson.replace(/^```json/, '').replace(/```$/, '').trim();
     else if (cleanJson.startsWith('```')) cleanJson = cleanJson.replace(/^```/, '').replace(/```$/, '').trim();
 
-    return JSON.parse(cleanJson);
+    let parsed = JSON.parse(cleanJson);
+    if (parsed) {
+      if (parsed.title) parsed.title = cleanStoryTextOutput(parsed.title);
+      if (parsed.outline) parsed.outline = cleanStoryTextOutput(parsed.outline);
+      if (Array.isArray(parsed.chapters)) {
+        parsed.chapters = parsed.chapters.map(ch => ({
+          ...ch,
+          chapterTitle: cleanStoryTextOutput(ch.chapterTitle || `Chương ${ch.chapterNumber}`),
+          summary: cleanStoryTextOutput(ch.summary || '')
+        }));
+      }
+    }
+    return parsed;
   }
 
   // Auto Retry Loop for Single Chapter API
@@ -3752,6 +3982,7 @@ ${matchedStyle.styleRules}
     }
 
     const lorebookPrompt = buildLorebookPromptContext(storyMeta);
+    const wordCountInstruction = getChapterWordCountPrompt(storyMeta.formData?.wordCountMode, storyMeta.formData?.wordCountCustom);
 
     const systemPrompt = `
 Hãy đóng vai một đại văn hào Tiếng Việt xuất sắc. Sáng tác văn bản nghệ thuật hoàn chỉnh cho CHƯƠNG ${targetIndex + 1}:
@@ -3769,14 +4000,20 @@ ${prevContext || '(Đây là chương đầu tiên mở màn)'}
 📌 KỊCH BẢN CHI TIẾT BẮT BUỘC BÁM SÁT CỦA CHƯƠNG NÀY:
 "${targetChap.summary}"
 
+📌 YÊU CẦU ĐỘ DÀI VĂN BẢN:
+${wordCountInstruction}
+
 ${styleInstruction || ''}
 ${lorebookPrompt}
 
-🎯 NGUYÊN TẮC BẮT BUỘC (CRITICAL):
-1. Đảm bảo chính tả & ngữ pháp Tiếng Việt 100% chuẩn xác. Không sai lỗi gõ phím.
-2. Triển khai chi tiết, sâu sắc, hấp dẫn theo từng mốc tình tiết trong kịch bản chương ở trên.
-3. Độ dài chương trọn vẹn, sinh động (~1000 - 2500 từ).
-4. Tuyệt đối KHÔNG chứa ký tự rác, mã markdown dư thừa (***, ###, \`\`\`), KHÔNG chứa lời thoại ngoài lề hay lời chào từ AI. Chỉ duy nhất nội dung câu chuyện!
+🎯 NGUYÊN TẮC BẮT BUỘC KHÔNG THỂ VI PHẠM (CRITICAL):
+1. 🔤 CHÍNH TẢ & NGỮ PHÁP TIẾNG VIỆT HOÀN HẢO 100%: Tuyệt đối không sai chính tả, không dùng từ viết ngọng hay lỗi đánh máy.
+2. 🚫 KHÔNG DÙNG KÝ TỰ ĐẶC BIỆT RÁC KHỎI NỘI DUNG (- -- * ** . ...): Tuyệt đối KHÔNG chèn ký tự -, --, *, **, . ... vào trong câu văn truyện. Dùng văn bản thuần chữ và dấu câu chuẩn (chấm, phẩy, chấm hỏi, chấm cảm).
+3. 🈲 TUYỆT ĐỐI KHÔNG CHỨA CHỮ TIẾNG TRUNG QUỐC: Tuyệt đối không để lọt bất kỳ ký tự Hán tự / Trung Quốc nào. Tên riêng, địa danh hay thuật ngữ phải Việt hóa hoặc dùng âm Hán-Việt rõ ràng.
+4. ⏳ TỪ NGỮ ĐÚNG BỐI CẢNH VÀ THỜI GIAN CỦA TRUYỆN: Dùng từ ngữ, đại từ xưng hô và giọng điệu phù hợp chính xác với bối cảnh lịch sử / thời đại của câu chuyện.
+5. 📖 Triển khai chi tiết, sâu sắc, hấp dẫn theo từng mốc tình tiết trong kịch bản chương ở trên.
+6. 🎯 ${wordCountInstruction}
+7. 🚫 Tuyệt đối KHÔNG chứa ký tự rác, mã markdown dư thừa, KHÔNG chứa lời thoại ngoài lề hay lời chào từ AI. Chỉ duy nhất nội dung câu chuyện!
 
 Trả về nội dung văn bản thuần túy của chương này.
 `;
@@ -3805,7 +4042,7 @@ Trả về nội dung văn bản thuần túy của chương này.
     if (!rawText) throw new Error('Không nhận được phản hồi từ AI');
 
     rawText = rawText.replace(/^```[a-z]*/gi, '').replace(/```$/g, '').trim();
-    return rawText;
+    return cleanStoryTextOutput(rawText);
   }
 
   async function callGeminiGenericJsonPrompt(promptText, model, logFn) {
@@ -3901,6 +4138,8 @@ Trả về nội dung văn bản thuần túy của chương này.
       ? 'SOÁT LỖI LOGIC & CHÍNH TẢ: Kiểm tra kỹ mâu thuẫn nhân vật, bối cảnh, mốc thời gian và sửa lỗi chính tả tỉ mỉ 100%.'
       : 'Đảm bảo câu văn mượt mà, chuẩn ngữ pháp và không sai chính tả Tiếng Việt.';
 
+    const wordCountInstruction = getChapterWordCountPrompt(formData.wordCountMode, formData.wordCountCustom);
+
     const genreInstruction = formData.genre === 'auto'
       ? '🤖 AI TỰ ĐỘNG PHÂN TÍCH: Hãy tự động phân tích kỹ nội dung kịch bản/ý tưởng trên để xác định và áp dụng thể loại truyện phù hợp nhất (VD: Tiên Hiệp, Hài Hước / Hài Bựa, Trinh Thám, Sci-Fi, Ngôn Tình, Kinh Dị, Xuyên Không, Mạt Thế...). Phản ánh thể loại này rõ ràng trong văn phong.'
       : formData.genre;
@@ -3930,25 +4169,27 @@ Hãy đóng vai một đại văn hào chuyên nghiệp với văn phong Tiếng
 - NGÔN NGỮ CHỦ ĐẠO: ${formData.language}
 - TÁC GIẢ KHỞI TẠO: ${formData.author}
 - SỐ LƯỢNG CHƯƠNG: ${chapterInstruction}
+- ĐỘ DÀI MỖI CHƯƠNG YÊU CẦU: ${wordCountInstruction}
 - YÊU CẦU LOGIC & CHÍNH TẢ: ${logicInstruction}
 ${styleInstruction ? styleInstruction : ''}
 
 🎯 NGUYÊN TẮC VIẾT TRUYỆN CHUẨN MỰC BẮT BUỘC (CRITICAL RULES):
-1. ĐẢM BẢO CHÍNH TẢ & NGỮ PHÁP TIẾNG VIỆT HOÀN HẢO (100% NO TYPOS):
-   - Tuyệt đối không sai chính tả, không dùng từ viết ngọng hay lỗi đánh máy.
-   - Sử dụng dấu câu (chấm, phẩy, chấm hỏi, chấm cảm, gạch đầu dòng) và viết hoa cực kỳ chuẩn mực theo văn phạm Tiếng Việt.
+1. 🔤 ĐẢM BẢO CHÍNH TẢ & NGỮ PHÁP TIẾNG VIỆT HOÀN HẢO 100%:
+   - Tuyệt đối không sai chính tả, không dùng từ viết ngọng hay lỗi đánh máy. Viết chuẩn mực văn phạm Việt Nam.
 
-2. KHÔNG CHỨA KÝ TỰ RÁC VÀ LỜI THỪA (NO EXTRA/GARBAGE CHARACTERS):
-   - Tuyệt đối không chèn các ký tự lạ, mã điều khiển, biểu tượng dư thừa (như ***, ###, ~~~, các khối markdown rác) vào giữa nội dung văn bản.
-   - Không chèn các câu thoại ngoài lề, lời chào hay lời nhắn gửi của AI (như "Chắc chắn rồi", "Dưới đây là truyện...", "Chúc bạn đọc vui vẻ").
-   - Chỉ duy nhất văn phong tác phẩm nghệ thuật chuẩn mực trong từng chương.
+2. 🚫 TUYỆT ĐỐI KHÔNG CHỨA KÝ TỰ RÁC (- -- * ** . ...):
+   - Tuyệt đối KHÔNG chèn các ký tự: -, --, *, **, . ... vào trong câu văn của truyện.
+   - Không gạch đầu dòng (-), không gạch đôi (--), không dùng dấu hoa thị (* hoặc **), không dùng chấm lửng rác (. ...).
+   - Không chèn lời chào, lời nhắn hay câu thoại ngoài lề của AI. Chỉ duy nhất nội dung câu chuyện thuần túy.
 
-3. VĂN PHONG SẮC NÉT - BÁM SÁT YÊU CẦU & KỊCH BẢN:
-   - Miêu tả bối cảnh giàu hình ảnh, tâm lý nhân vật sinh động, hội thoại tự nhiên, giàu cảm xúc.
-   - Triển khai chính xác và đầy đủ tất cả các tình tiết trong ý tưởng kịch bản do người dùng cung cấp.
+3. 🈲 TUYỆT ĐỐI KHÔNG CHỨA CHỮ TIẾNG TRUNG QUỐC:
+   - Tuyệt đối không để lọt bất kỳ ký tự Hán tự / Trung Quốc nào vào văn bản. Mọi tên nhân vật, địa danh, thuật ngữ phải Việt hóa hoặc dùng âm Hán-Việt chuẩn.
 
-4. LOGIC MẠCH LẠC & GẮN KẾT:
-   - Giữa các chương có sự kết nối tự nhiên, không bị gián đoạn hay mâu thuẫn diễn biến.
+4. ⏳ TỪ NGỮ ĐÚNG BỐI CẢNH VÀ THỜI GIAN CỦA TRUYỆN:
+   - Dùng từ ngữ, đại từ xưng hô và văn phong bám sát chính xác bối cảnh lịch sử, thời đại của truyện (Cổ Đại / Tiên Hiệp xưng hô cổ phong; Hiện Đại xưng hô tôi/anh/em/cậu; Viễn Tưởng phù hợp tương lai).
+
+5. 📖 VĂN PHONG SẮC NÉT & LOGIC MẠCH LẠC:
+   - Miêu tả bối cảnh giàu hình ảnh, tâm lý nhân vật sinh động, hội thoại tự nhiên, giàu cảm xúc, kết nối mượt mà giữa các chương.
 
 YÊU CẦU ĐỊNH DẠNG ĐẦU RA:
 Trả về DUY NHẤT một chuỗi JSON hợp lệ theo đúng cấu trúc sau (không kèm lời dẫn hay ký tự thừa bên ngoài JSON):
@@ -4011,20 +4252,21 @@ Trả về DUY NHẤT một chuỗi JSON hợp lệ theo đúng cấu trúc sau 
       }
     }
 
-    // Post-process & sanitize output to guarantee no garbage characters or unwanted formatting
-    if (resultJson && Array.isArray(resultJson.chapters)) {
-      resultJson.chapters = resultJson.chapters.map(ch => {
-        let text = ch.content || '';
-        // Remove markdown block tags if AI leaked inside chapter text
-        text = text.replace(/```[a-z]*/gi, '').replace(/```/g, '');
-        // Clean double spaces and normalize line breaks
-        text = text.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
-        return {
-          ...ch,
-          chapterTitle: (ch.chapterTitle || `Chương ${ch.chapterNumber}`).replace(/```/g, '').trim(),
-          content: text
-        };
-      });
+    // Post-process & sanitize output to guarantee no garbage characters, Chinese text or unwanted formatting
+    if (resultJson) {
+      if (resultJson.title) resultJson.title = cleanStoryTextOutput(resultJson.title);
+      if (resultJson.outline) resultJson.outline = cleanStoryTextOutput(resultJson.outline);
+      if (Array.isArray(resultJson.chapters)) {
+        resultJson.chapters = resultJson.chapters.map(ch => {
+          let text = ch.content || '';
+          text = text.replace(/```[a-z]*/gi, '').replace(/```/g, '');
+          return {
+            ...ch,
+            chapterTitle: cleanStoryTextOutput(ch.chapterTitle || `Chương ${ch.chapterNumber}`),
+            content: cleanStoryTextOutput(text)
+          };
+        });
+      }
     }
 
     return resultJson;
@@ -4473,9 +4715,22 @@ HÃY PHÂN TÍCH VÀ TRẢ VỀ DUY NHẤT MỘT PHẢN HỒI JSON HỢP LỆ TH
             <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 12px; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
               ${escapeHtml(s.outline || '')}
             </p>
-            <div class="story-actions" style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <div class="story-actions" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;">
               <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="openReaderById('${s.id}')">📖 Đọc Sách</button>
-              <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="reopenOutlineEditorById('${s.id}')" title="Mở lại toàn bộ kịch bản chi tiết và dàn ý các chương">🎬 Dàn Ý & Kịch Bản</button>
+              <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="reopenOutlineEditorById('${s.id}')" title="Mở lại kịch bản chi tiết & dàn ý các chương">🎬 Kịch Bản</button>
+              
+              <details style="position: relative; display: inline-block;">
+                <summary class="btn btn-secondary btn-sm" style="list-style: none; cursor: pointer; user-select: none;" title="Xuất file truyện đa dạng (EPUB / DOCX / PDF / TXT)">
+                  📥 Xuất ▾
+                </summary>
+                <div style="position: absolute; right: 0; bottom: 100%; margin-bottom: 6px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow-lg); padding: 8px; z-index: 100; min-width: 185px; display: flex; flex-direction: column; gap: 6px;">
+                  <button class="btn btn-secondary btn-sm" onclick="exportStoryEpubById('${s.id}')" style="justify-content: flex-start; text-align: left;" title="Xuất file .epub đọc trên máy Kindle, Kobo, iBooks">📱 EPUB (Kindle/Kobo)</button>
+                  <button class="btn btn-secondary btn-sm" onclick="exportStoryDocxById('${s.id}')" style="justify-content: flex-start; text-align: left;" title="Xuất file .docx cho Microsoft Word">📄 File Word DOCX</button>
+                  <button class="btn btn-secondary btn-sm" onclick="printStoryPdfById('${s.id}')" style="justify-content: flex-start; text-align: left;" title="Dàn trang PDF / In ấn A4">🖨️ PDF / Dàn Trang In</button>
+                  <button class="btn btn-secondary btn-sm" onclick="exportStoryTxtById('${s.id}')" style="justify-content: flex-start; text-align: left;" title="Xuất file .txt thuần túy">📥 File Văn Bản TXT</button>
+                </div>
+              </details>
+
               <button class="btn btn-danger btn-sm" onclick="deleteStory('${s.id}')" title="Xoá dự án">🗑️</button>
             </div>
           </div>
@@ -4604,6 +4859,7 @@ HÃY PHÂN TÍCH VÀ TRẢ VỀ DUY NHẤT MỘT PHẢN HỒI JSON HỢP LỆ TH
     }).join('');
 
     renderCurrentChapter();
+    saveActiveSessionState();
   }
 
   function renderCurrentChapter() {
@@ -4720,6 +4976,7 @@ HÃY PHÂN TÍCH VÀ TRẢ VỀ DUY NHẤT MỘT PHẢN HỒI JSON HỢP LỆ TH
   function jumpToChapter(idx) {
     appState.currentChapterIndex = idx;
     renderCurrentChapter();
+    saveActiveSessionState();
   }
 
   function prevChapter() {
@@ -4730,6 +4987,7 @@ HÃY PHÂN TÍCH VÀ TRẢ VỀ DUY NHẤT MỘT PHẢN HỒI JSON HỢP LỆ TH
       appState.currentChapterIndex = -1; // back to cover
       renderCurrentChapter();
     }
+    saveActiveSessionState();
   }
 
   function nextChapter() {
@@ -4738,6 +4996,7 @@ HÃY PHÂN TÍCH VÀ TRẢ VỀ DUY NHẤT MỘT PHẢN HỒI JSON HỢP LỆ TH
       appState.currentChapterIndex++;
       renderCurrentChapter();
     }
+    saveActiveSessionState();
   }
 
   // --- READER THEME & CUSTOMIZATION ---
@@ -5303,6 +5562,11 @@ HÃY PHÂN TÍCH VÀ TRẢ VỀ DUY NHẤT MỘT PHẢN HỒI JSON HỢP LỆ TH
     document.getElementById('inline-ai-modal').style.display = 'flex';
   }
 
+  function openInlineAiWithPreset(actionPreset) {
+    openInlineAiEditor('selected');
+    selectInlineAction(actionPreset);
+  }
+
   function closeInlineAiModal() {
     document.getElementById('inline-ai-modal').style.display = 'none';
   }
@@ -5339,6 +5603,9 @@ HÃY PHÂN TÍCH VÀ TRẢ VỀ DUY NHẤT MỘT PHẢN HỒI JSON HỢP LỆ TH
     const customInstr = document.getElementById('inline-custom-instruction')?.value.trim() || '';
 
     const actionPrompts = {
+      continue_300: 'Hãy viết tiếp diễn biến nối tiếp khoảng 300 từ ngay sau đoạn văn bản này một cách mượt mà, lôi cuốn, văn phong tự nhiên giàu chi tiết.',
+      detail_emotion: 'Hãy mở rộng và miêu tả rõ hơn về diễn biến tình cảm, cảm xúc thầm kín, ánh mắt, cử chỉ và những chuyển biến tâm lý giữa các nhân vật trong đoạn văn bản sau.',
+      polish_emotion: 'Hãy trau chuốt và sửa lại từng câu văn trong đoạn sau cho giàu cảm xúc, chạm đến trái tim người đọc, dùng từ đắt giá và truyền cảm hơn.',
       rewrite_dramatic: 'Hãy viết lại đoạn văn bản sau theo phong cách kịch tính, dồn dập cảm xúc và cuốn hút hơn.',
       add_dialogue: 'Hãy bổ sung thêm các câu hội thoại sinh động, thể hiện rõ tính cách và xung đột giữa các nhân vật trong đoạn văn bản sau.',
       detail_scene: 'Hãy miêu tả chi tiết bối cảnh không gian, hình ảnh, âm thanh và nội tâm nhân vật sâu sắc hơn cho đoạn văn bản sau.',
@@ -5346,7 +5613,7 @@ HÃY PHÂN TÍCH VÀ TRẢ VỀ DUY NHẤT MỘT PHẢN HỒI JSON HỢP LỆ TH
       custom: customInstr || 'Hãy chỉnh sửa và nâng cấp đoạn văn bản sau theo chuẩn văn học xuất sắc.'
     };
 
-    const instruction = actionPrompts[action] || actionPrompts.rewrite_dramatic;
+    const instruction = actionPrompts[action] || actionPrompts.continue_300;
 
     const btn = document.getElementById('btn-run-inline-ai');
     const origText = btn.innerHTML;
@@ -5391,7 +5658,7 @@ ${lorebookCtx}
 
   async function callGeminiGenericTextPrompt(promptText, model) {
     let lastErr = null;
-    const validModel = (model && ['gemini-2.5-flash','gemini-2.5-pro','gemini-2.0-flash','gemini-2.0-flash-lite','gemini-1.5-flash','gemini-1.5-pro'].includes(model)) ? model : getSelectedModel();
+    const validModel = (model && ['gemini-3.6-flash','gemini-3.5-flash','gemini-3.0-flash','gemini-3.0-pro','gemini-2.5-flash','gemini-2.5-pro','gemini-2.0-flash','gemini-2.0-flash-lite','gemini-1.5-flash','gemini-1.5-pro'].includes(model)) ? model : getSelectedModel();
 
     for (let i = 0; i < appState.keys.length; i++) {
       const keyObj = appState.keys[i];
@@ -5487,6 +5754,62 @@ ${lorebookCtx}
       btn.className = 'btn btn-primary btn-sm';
       showToast('Bạn có thể trực tiếp gõ/sửa văn bản trong khung đọc. Nhấn "💾 Lưu Chỉnh Sửa" khi xong.', 'info');
     }
+  }
+
+  // --- EXPORT BY ID & OUTLINE HELPERS ---
+  function exportStoryEpubById(id) {
+    const story = appState.stories.find(s => String(s.id) === String(id));
+    if (story) exportStoryEpub(story);
+    else showToast('Không tìm thấy dự án!', 'warning');
+  }
+
+  function exportStoryDocxById(id) {
+    const story = appState.stories.find(s => String(s.id) === String(id));
+    if (story) exportStoryDocx(story);
+    else showToast('Không tìm thấy dự án!', 'warning');
+  }
+
+  function printStoryPdfById(id) {
+    const story = appState.stories.find(s => String(s.id) === String(id));
+    if (story) printStoryPdf(story);
+    else showToast('Không tìm thấy dự án!', 'warning');
+  }
+
+  function exportStoryTxtById(id) {
+    const story = appState.stories.find(s => String(s.id) === String(id));
+    if (story) {
+      let content = `=== ${story.title.toUpperCase()} ===\n`;
+      content += `Tác giả: ${story.author || 'Gemini Studio'}\n`;
+      content += `Thể loại: ${story.genre || 'Tiểu thuyết'}\n\n`;
+      content += `CỐT TRUYỆN / TÓM TẮT:\n${story.outline || ''}\n\n`;
+      if (story.review) content += `BIÊN TẬP CỐT TRUYỆN:\n${story.review}\n\n`;
+      content += `===================================\n\n`;
+
+      if (story.chapters && story.chapters.length > 0) {
+        story.chapters.forEach((ch, i) => {
+          content += `\n\n--- ${ch.chapterTitle || `Chương ${i + 1}`} ---\n\n`;
+          content += ch.content || ch.summary || '';
+        });
+      }
+      downloadFile(`${slugify(story.title || 'truyen')}.txt`, content, 'text/plain;charset=utf-8');
+      showToast(`🎉 Đã xuất file TXT thành công!`, 'success');
+    } else {
+      showToast('Không tìm thấy dự án!', 'warning');
+    }
+  }
+
+  function exportActiveOutlineStory(type) {
+    if (!activeOutline) {
+      showToast('Chưa có kịch bản kịch bản nào đang mở!', 'warning');
+      return;
+    }
+    const storyObj = saveCurrentProjectToLibrary();
+    if (!storyObj) return;
+
+    if (type === 'epub') exportStoryEpub(storyObj);
+    else if (type === 'docx') exportStoryDocx(storyObj);
+    else if (type === 'pdf') printStoryPdf(storyObj);
+    else if (type === 'txt') exportStoryTxtById(storyObj.id);
   }
 
   // --- EXPORT EPUB, DOCX, PRINT PDF ---
